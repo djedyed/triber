@@ -6,6 +6,7 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
+<meta name="app-version" content="1.1.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -14,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
-<script src="config.js"></script>
+<script src="config.js?v=1.1.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -158,8 +159,8 @@ footer b{color:var(--text);letter-spacing:.14em}
 /* ---------- intro ---------- */
 #intro{position:fixed;inset:0;z-index:100;background:#0a050c;display:none;align-items:center;justify-content:center}
 #intro.show{display:flex}
-#intro video{width:100%;height:100%;object-fit:contain}
-#intro .ctl{position:absolute;right:16px;bottom:16px;display:flex;gap:8px}
+#intro video{width:min(100vw,calc(100vh * 16 / 9));max-height:100vh;max-height:100dvh;aspect-ratio:16/9;object-fit:contain;display:block;margin:auto;background:#0a050c}
+#intro .ctl{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));display:flex;gap:8px}
 #intro .ctl button{background:rgba(21,11,26,.7);border:1px solid var(--line);border-radius:99px;padding:8px 16px;backdrop-filter:blur(6px)}
 #intro.out{opacity:0;transition:opacity .5s}
 
@@ -226,7 +227,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.1.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -308,7 +309,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 
 <footer>
   <img src="assets/triber-icon.png" alt="">
-  <span><b>TRIBER</b> &nbsp;True Rhythm Ignites Bodies, Energy Rising.</span>
+  <span><b>TRIBER</b> &nbsp;True Rhythm Ignites Bodies, Energy Rising. <small id="ver" style="opacity:.6"></small></span>
 </footer>
 
 <div id="toast" role="status" aria-live="polite"></div>
@@ -670,6 +671,7 @@ function intro() {
 
 /* ---------------- boot ---------------- */
 (async function boot() {
+  const vm = document.querySelector('meta[name=app-version]'); if (vm) { const v = $('#ver'); if (v) v.textContent = 'v' + vm.content; console.info('TRIBER v' + vm.content); }
   intro();
   renderMachine(); renderPlayState();
   if (DEMO) { const b = $('#banner'); b.style.display = 'block'; b.textContent = 'Demo mode: sample mixes only. Plays, likes and comments are not saved yet. Connect the database in config.js to go live.'; }
