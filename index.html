@@ -6,7 +6,7 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.4.1">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.4.0"></script>
+<script src="config.js?v=1.4.1"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -255,7 +255,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.4.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.4.1"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -753,10 +753,10 @@ function renderNow() {
   $('#nowLabel').textContent = S.playing ? 'Now playing' : 'Up next';
   if (!m) { $('#nowTxt').textContent = '—'; $('#nowIdx').textContent = ''; return; }
   if (tr) {
-    $('#nowTxt').innerHTML = `<strong>${esc(tr.title)}</strong>${tr.artist ? ` <em>${esc(tr.artist)}</em>` : ''}${trackMeta(tr) ? ` <em>· ${esc(trackMeta(tr))}</em>` : ''}`;
+    $('#nowTxt').innerHTML = `<strong>${esc(tr.title)}</strong>${tr.artist ? ` by <em>${esc(tr.artist)}</em>` : ''}`;
     $('#nowIdx').textContent = `${i + 1}/${S.tracks.length}`;
   } else {
-    $('#nowTxt').innerHTML = `<strong>${esc(m.title)}</strong> <em>${esc(m.artist)}</em>`;
+    $('#nowTxt').innerHTML = `<strong>${esc(m.title)}</strong> by <em>${esc(m.artist)}</em>`;
     $('#nowIdx').textContent = '';
   }
   document.querySelectorAll('#tl li').forEach((li, k) => li.classList.toggle('cur', k === i));

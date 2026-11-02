@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.4.1 — 2026-11-01
+- Now-playing line reads “Track name by Artist name” (Mixcloud style), without BPM/key/label. Those stay in the tracklist.
+
 ## 1.4.0 — 2026-11-01
 - Track labels: each track can carry BPM, musical key and record label. They show in the tracklist, the “now playing” line and the cassette label.
 - Needs the 002_track_labels.sql migration on Supabase (the site still works without it, just without the extra labels).
