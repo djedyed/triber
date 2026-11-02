@@ -6,7 +6,7 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
-<meta name="app-version" content="1.1.0">
+<meta name="app-version" content="1.2.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
-<script src="config.js?v=1.1.0"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<script src="config.js?v=1.2.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -179,12 +179,10 @@ footer b{color:var(--text);letter-spacing:.14em}
 .gram svg{position:absolute;left:0;top:0}
 .gram .rec{position:absolute;bottom:4px;left:28px;width:104px;height:104px;border-radius:50%;background:repeating-radial-gradient(circle,#241129 0 3px,#150b1a 3px 6px);box-shadow:inset 0 0 0 2px var(--line)}
 .playing .gram .rec{animation:spin 3.4s linear infinite}
-.cass{width:240px;height:156px;border-radius:12px;background:var(--card);box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 0 0 2px var(--line);padding:14px;position:relative}
-.cass .win{height:100%;border-radius:8px;background:#150b1a;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:relative}
-.cass .rl{width:58px;height:58px;border-radius:50%;background:#0a0a0a;box-shadow:inset 0 0 0 7px color-mix(in srgb,var(--a) 40%,transparent),inset 0 0 0 9px #150b1a;display:grid;place-items:center}
-.cass .rl i{width:14px;height:14px;background:#150b1a}
-.playing .cass .rl{animation:spin 1.4s linear infinite}
-.cass .lbl{position:absolute;top:8px;left:50%;transform:translateX(-50%);max-width:78%;font:italic 600 11px/1 var(--serif);color:#150b1a;background:var(--text);padding:3px 9px;border-radius:3px;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cass{width:260px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
+.cass svg{display:block;width:100%;height:auto}
+.cass .lt{font-family:'Caveat','Bradley Hand','Segoe Script',cursive;font-weight:700;fill:#2a2230}
+.cass .hub{transform-box:fill-box;transform-origin:center}
 .eight{width:240px;height:156px;border-radius:8px;background:linear-gradient(160deg,#2e1636,#1c0f21);box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 0 0 2px var(--line);padding:16px}
 .eight .leds{display:flex;gap:8px;margin-bottom:12px}
 .eight .leds span{width:22px;height:22px;border-radius:4px;display:grid;place-items:center;font:700 10px ui-monospace,monospace;background:var(--line);color:#150b1a;opacity:.5}
@@ -219,6 +217,31 @@ footer b{color:var(--text);letter-spacing:.14em}
   .top{flex-wrap:wrap}
   .brand b{font-size:21px}
 }
+
+.eqbtn[aria-pressed=true]{color:var(--amber)}
+.eqp{margin-top:10px;background:linear-gradient(180deg,#2a1631,#1c0f21);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.eqp[hidden]{display:none}
+.eq-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.eq-top h3{font:600 12px/1 var(--sans,Inter,system-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 auto 0 0}
+.eqp .seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.eqp .seg button{background:none;border:0;color:var(--muted);padding:5px 9px;font-size:12px;font-weight:600;cursor:pointer}
+.eqp .seg button[aria-checked=true]{background:var(--accent);color:#150b1a}
+.eqp select{background:#150b1a;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 6px;font-size:12px}
+.eqp .pw{border:1px solid var(--line);background:#150b1a;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer}
+.eqp .pw[aria-pressed=true]{color:#150b1a;background:var(--teal);border-color:var(--teal)}
+.eqp canvas{display:block;width:100%;height:84px;background:#120918;border-radius:8px;border:1px solid var(--line)}
+.eq-faders{display:flex;justify-content:space-between;gap:2px;margin-top:10px}
+.fd{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;touch-action:none;user-select:none}
+.fd .db{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--muted);height:10px}
+.fd .slot{position:relative;width:34px;height:116px;cursor:ns-resize;outline:none}
+.fd .slot::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:-3px;border-radius:3px;background:#0c0510;box-shadow:inset 0 1px 3px #000,0 0 0 1px #3d2246}
+.fd .slot::after{content:"";position:absolute;left:4px;right:4px;top:50%;height:1px;background:rgba(255,255,255,.18)}
+.fd .cap{position:absolute;left:50%;width:26px;height:16px;margin:-8px 0 0 -13px;border-radius:3px;background:linear-gradient(180deg,#d9d2cf,#8d8486 55%,#bdb5b3);box-shadow:0 2px 4px rgba(0,0,0,.6);z-index:1}
+.fd .cap::after{content:"";position:absolute;left:3px;right:3px;top:7px;height:2px;background:#2a1631}
+.fd .slot:focus-visible .cap{outline:2px solid var(--accent);outline-offset:2px}
+.fd .hz{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--text)}
+.eq-note{margin:8px 0 0;font-size:11.5px;color:var(--muted);line-height:1.4}
+.eqp.off .eq-faders,.eqp.off canvas{opacity:.55}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
@@ -227,7 +250,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.1.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.2.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -272,7 +295,19 @@ footer b{color:var(--text);letter-spacing:.14em}
       <div class="actions">
         <button class="act" id="bLike" aria-pressed="false"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg><span id="likeTxt">Like</span></button>
         <a class="act" id="bDl" href="#" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg><span id="dlTxt">Download</span></a>
+        <button class="act eqbtn" id="bEq" aria-pressed="false" aria-expanded="false" aria-controls="eq"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V9M12 20V4M19 20v-7M3 13h4M10 8h4M17 16h4"/></svg>EQ</button>
         <button class="act" id="bShare"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
+      </div>
+      <div class="eqp" id="eq" hidden>
+        <div class="eq-top">
+          <h3>Your sound</h3>
+          <div class="seg" role="radiogroup" aria-label="Equaliser bands"><button role="radio" data-mode="3">3-band</button><button role="radio" data-mode="7">7-band</button></div>
+          <select id="eqPreset" aria-label="Preset"></select>
+          <button class="pw" id="eqPow" aria-pressed="false">OFF</button>
+        </div>
+        <canvas id="eqCv" width="560" height="168" aria-label="Equaliser response and live spectrum"></canvas>
+        <div class="eq-faders" id="eqFaders"></div>
+        <p class="eq-note" id="eqNote">Tune the mix to your ears or your speakers. Your setting is saved on this device.</p>
       </div>
     </div>
   </section>
@@ -417,12 +452,96 @@ function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.ad
 const ICON_PLAY = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
 const ICON_PAUSE = '<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
 
+
+/* ---------- Cassette skin (v1.2) ---------- */
+const CASS = { hubA: 28, rMax: 50, cyL: 147, cxL: 170, cxR: 310, v: 95, angL: 0, angR: 0, last: 0, p: -1, key: '', mode: 'track', tint: 0 };
+const CASS_TINTS = ['#f3ead6', '#f6dfe4', '#e4eef2', '#f2efc9', '#e9e2f3'];
+function tangentPt(cx, cy, r, qx, qy, left) {
+  const dx = qx - cx, dy = qy - cy, d = Math.hypot(dx, dy) || 1, base = Math.atan2(dy, dx), off = Math.acos(Math.min(1, r / d));
+  const pts = [base + off, base - off].map(a => [cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  return (left ? pts.sort((a, b) => a[0] - b[0]) : pts.sort((a, b) => b[0] - a[0]))[0];
+}
+function hubSVG(id, cx, cy) {
+  const teeth = [0, 60, 120, 180, 240, 300].map(a => `<rect x="-3.2" y="-17.5" width="6.4" height="8" rx="1" fill="#2a1d0b" transform="rotate(${a})"/>`).join('');
+  return `<g transform="translate(${cx} ${cy})"><circle id="${id}pack" r="40" fill="url(#tp)"/><circle id="${id}ring" r="40" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+  <g id="${id}hub" class="hub"><circle r="22" fill="url(#gold)"/><circle r="15" fill="#120d08"/>${teeth}<circle r="6.5" fill="url(#gold)"/><circle r="2.6" fill="#120d08"/></g>
+  <path d="M-22 0A22 22 0 0 1 0 -22" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.4" stroke-linecap="round" transform="rotate(-20)"/></g>`;
+}
+function cassetteHTML() {
+  const screws = [[26, 26], [454, 26], [26, 274], [454, 274], [240, 100]].map(([x, y]) => `<g transform="translate(${x} ${y})"><circle r="7" fill="#1a1a1c" stroke="#3a3a40" stroke-width="1"/><path d="M-4 0H4M0 -4V4" stroke="#6a6a72" stroke-width="1.4" stroke-linecap="round"/></g>`).join('');
+  return `<div class="cass"><svg viewBox="0 0 480 300" role="img" aria-label="Cassette tape playing"><defs>
+  <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2b30"/><stop offset=".5" stop-color="#17171a"/><stop offset="1" stop-color="#0d0d0f"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2d27a"/><stop offset=".5" stop-color="#b98a2c"/><stop offset="1" stop-color="#e5c065"/></linearGradient>
+  <radialGradient id="tp" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#7a5236"/><stop offset=".7" stop-color="#4a2f20"/><stop offset="1" stop-color="#2e1c12"/></radialGradient>
+  <linearGradient id="win" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9aa0aa" stop-opacity=".16"/><stop offset="1" stop-color="#0a0a0c" stop-opacity=".12"/></linearGradient>
+  <clipPath id="wclip"><rect x="92" y="92" width="296" height="112" rx="16"/></clipPath></defs>
+  <rect x="4" y="4" width="472" height="292" rx="20" fill="url(#shell)" stroke="#000" stroke-width="2"/>
+  <rect x="9" y="9" width="462" height="282" rx="16" fill="none" stroke="rgba(255,255,255,.07)"/>
+  <rect id="cpaper" x="38" y="14" width="404" height="68" rx="6" fill="${CASS_TINTS[0]}"/>
+  <rect x="38" y="14" width="404" height="9" rx="4" fill="#d44a5f" opacity=".9"/>
+  <text id="cside" x="52" y="46" class="lt" font-size="22" fill="#8a2a3a">A</text>
+  <text id="clen" x="430" y="46" text-anchor="end" font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="700" fill="#6b5f6e">C-60</text>
+  <text id="ct1" x="240" y="52" text-anchor="middle" class="lt" font-size="30"></text>
+  <text id="ct2" x="240" y="73" text-anchor="middle" class="lt" font-size="19" opacity=".8"></text>
+  <rect x="92" y="92" width="296" height="112" rx="16" fill="#08080a"/>
+  <g clip-path="url(#wclip)">${hubSVG('cl', CASS.cxL, CASS.cyL)}${hubSVG('cr', CASS.cxR, CASS.cyL)}</g>
+  <rect x="92" y="92" width="296" height="112" rx="16" fill="url(#win)" stroke="#000" stroke-width="2"/>
+  <path d="M100 100H300L270 120H100Z" fill="rgba(255,255,255,.07)" clip-path="url(#wclip)"/>
+  <path d="M60 214H420L450 286H30Z" fill="#101013" stroke="#2c2c32" stroke-width="1.5"/>
+  <rect x="200" y="226" width="80" height="22" rx="3" fill="#07070a" stroke="#34343b"/>
+  <rect x="218" y="240" width="44" height="16" fill="#1e1e22" stroke="#3a3a42"/>
+  <path id="ctape" d="" fill="none" stroke="#8a5e3c" stroke-width="3.2" stroke-linejoin="round"/>
+  <circle cx="132" cy="254" r="9" fill="#1c1c20" stroke="#4a4a52" stroke-width="2"/><circle cx="132" cy="254" r="3" fill="#6a6a72"/>
+  <circle cx="348" cy="254" r="9" fill="#1c1c20" stroke="#4a4a52" stroke-width="2"/><circle cx="348" cy="254" r="3" fill="#6a6a72"/>
+  <circle cx="86" cy="270" r="6" fill="#050507" stroke="#2c2c32"/><circle cx="394" cy="270" r="6" fill="#050507" stroke="#2c2c32"/>
+  ${screws}</svg></div>`;
+}
+function fitText(el, base, maxW) {
+  el.setAttribute('font-size', base);
+  let w = el.getComputedTextLength ? el.getComputedTextLength() : 0, sz = base;
+  while (w > maxW && sz > 11) { sz -= 1; el.setAttribute('font-size', sz); w = el.getComputedTextLength(); }
+}
+function cassLabel(m, tr, i) {
+  if (S.skin !== 'cassette' || !m || !$('.cass')) return;
+  const key = m.id + '|' + i;
+  if (key !== CASS.key) { CASS.key = key; CASS.mode = tr ? (Math.random() < 0.5 ? 'mix' : 'track') : 'mix'; CASS.tint = Math.floor(Math.random() * CASS_TINTS.length); CASS.side = Math.random() < 0.5 ? 'A' : 'B'; }
+  const useTrack = CASS.mode === 'track' && tr;
+  const l1 = useTrack ? tr.title : m.title, l2 = useTrack ? (tr.artist || m.artist) : m.artist;
+  const t1 = $('#ct1'), t2 = $('#ct2');
+  t1.textContent = l1 || 'Untitled'; t2.textContent = l2 || '';
+  $('#cpaper').setAttribute('fill', CASS_TINTS[CASS.tint]); $('#cside').textContent = CASS.side || 'A';
+  const mins = Math.max(10, Math.ceil((duration() || 3600) / 600) * 10);
+  $('#clen').textContent = 'C-' + mins;
+  fitText(t1, 30, 290); fitText(t2, 19, 290);
+}
+function cassFrame(now) {
+  requestAnimationFrame(cassFrame);
+  const hub = document.getElementById('clhub'); if (!hub) { CASS.last = now; CASS.p = -1; return; }
+  const dt = Math.min(0.1, (now - (CASS.last || now)) / 1000); CASS.last = now;
+  const d = duration(), p = d ? Math.min(1, Math.max(0, audio.currentTime / d)) : 0;
+  const a2 = CASS.hubA ** 2, b2 = CASS.rMax ** 2;
+  const rL = Math.sqrt(a2 + (b2 - a2) * (1 - p)), rR = Math.sqrt(a2 + (b2 - a2) * p);
+  const playing = !audio.paused && !audio.ended && S.playing;
+  if (playing && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    CASS.angL -= (CASS.v / rL) * dt * 57.2958; CASS.angR -= (CASS.v / rR) * dt * 57.2958;
+    hub.style.transform = `rotate(${CASS.angL}deg)`; document.getElementById('crhub').style.transform = `rotate(${CASS.angR}deg)`;
+  }
+  if (Math.abs(p - CASS.p) > 0.0004 || CASS.p < 0) {
+    CASS.p = p;
+    document.getElementById('clpack').setAttribute('r', rL.toFixed(2)); document.getElementById('clring').setAttribute('r', rL.toFixed(2));
+    document.getElementById('crpack').setAttribute('r', rR.toFixed(2)); document.getElementById('crring').setAttribute('r', rR.toFixed(2));
+    const L = tangentPt(CASS.cxL, CASS.cyL, rL, 132, 254, true), R = tangentPt(CASS.cxR, CASS.cyL, rR, 348, 254, false);
+    document.getElementById('ctape').setAttribute('d', `M${L[0].toFixed(1)} ${L[1].toFixed(1)}L132 263L348 263L${R[0].toFixed(1)} ${R[1].toFixed(1)}`);
+  }
+}
+requestAnimationFrame(cassFrame);
+
 function machineHTML(skin, mix) {
   const t = esc(mix ? `${mix.title} — ${mix.artist}` : 'Triber');
   const bars = Array.from({ length: 22 }, (_, i) => `<i style="--d:${(0.35 + (hash(mix?.title + i) % 60) / 100).toFixed(2)}s"></i>`).join('');
   switch (skin) {
     case 'gramophone': return `<div class="gram"><svg width="240" height="170" viewBox="0 0 240 170"><path d="M118 160Q40 138 28 46Q26 8 62 4Q130-6 215 66Q226 74 215 82Q170 44 98 38Q60 36 66 68Q72 108 130 132Z" fill="var(--accent)" opacity=".92"/></svg><div class="rec"></div></div>`;
-    case 'cassette': return `<div class="cass"><div class="lbl">${esc(mix ? mix.artist : '')}</div><div class="win"><div class="rl"><i></i></div><div class="rl"><i></i></div></div></div>`;
+    case 'cassette': return cassetteHTML();
     case 'eight': return `<div class="eight"><div class="leds">${[1,2,3,4].map(n => `<span class="${n === (S.cur ? (hash(S.cur.id) % 4) + 1 : 1) ? 'on' : ''}">${n}</span>`).join('')}</div><div class="w"><div class="h"></div><div class="b"></div><div class="h"></div></div></div>`;
     case 'reel': return `<div class="reel"><div class="r"><b></b><i></i></div><div class="r"><b></b><i></i></div></div>`;
     case 'cd': return `<div class="cd"></div>`;
@@ -476,7 +595,7 @@ function renderNow() {
   }
   document.querySelectorAll('#tl li').forEach((li, k) => li.classList.toggle('cur', k === i));
   if (S.skin === 'digital') { const tk = $('#tick'); if (tk) tk.textContent = (tr ? `${tr.title}${tr.artist ? ' — ' + tr.artist : ''}` : `${m.title} — ${m.artist}`); }
-  if (S.skin === 'cassette') { const l = $('.cass .lbl'); if (l) l.textContent = tr?.artist || m.artist; }
+  cassLabel(m, tr, i);
   if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
     navigator.mediaSession.metadata = new MediaMetadata({ title: tr ? tr.title : m.title, artist: tr?.artist || m.artist, album: m.title, artwork: [{ src: new URL('assets/social-512.png', location.href).href, sizes: '512x512', type: 'image/png' }] });
   }
@@ -555,10 +674,161 @@ async function selectMix(id, play) {
   }
   if (play) startPlayback();
 }
+
+/* ---------- Listener equaliser (v1.2) ---------- */
+const EQ_BANDS = {
+  3: [{ f: 100, t: 'lowshelf', q: 0.7, l: 'Bass' }, { f: 1000, t: 'peaking', q: 0.7, l: 'Mid' }, { f: 8000, t: 'highshelf', q: 0.7, l: 'Treble' }],
+  7: [{ f: 60, t: 'lowshelf', q: 0.7, l: '60' }, { f: 150, t: 'peaking', q: 1.0, l: '150' }, { f: 400, t: 'peaking', q: 1.0, l: '400' }, { f: 1000, t: 'peaking', q: 1.0, l: '1k' }, { f: 2400, t: 'peaking', q: 1.0, l: '2.4k' }, { f: 6000, t: 'peaking', q: 1.0, l: '6k' }, { f: 15000, t: 'highshelf', q: 0.7, l: '15k' }]
+};
+const EQ_PRESETS = {
+  Flat: [[0, 0, 0], [0, 0, 0, 0, 0, 0, 0]],
+  'Bass boost': [[8, 0, 1], [8, 6, 2, 0, 0, 0, 0]],
+  'Club': [[6, -2, 4], [6, 4, 0, -2, 0, 3, 5]],
+  'Vocal': [[-3, 4, 1], [-4, -2, 1, 3, 4, 2, 0]],
+  'Bright': [[-1, 0, 7], [-1, 0, 0, 0, 2, 5, 8]],
+  'Warm': [[4, 1, -4], [4, 3, 1, 0, -1, -3, -5]],
+  'Loudness': [[6, -2, 5], [6, 3, 0, -2, -1, 3, 5]],
+  'Small speaker': [[-6, 3, 2], [-8, -5, 2, 4, 4, 2, 0]]
+};
+const EQ = { ctx: null, src: null, pre: null, an: null, nodes: { 3: [], 7: [] }, built: false, probing: false, buf: null, raf: 0 };
+let EQS = { on: false, mode: 7, preset: 'Flat', g: { 3: [0, 0, 0], 7: [0, 0, 0, 0, 0, 0, 0] } };
+try { const raw = store.get('triber_eq'); if (raw) { const o = JSON.parse(raw); EQS = { ...EQS, ...o, g: { 3: (o.g?.[3] || EQS.g[3]).slice(0, 3), 7: (o.g?.[7] || EQS.g[7]).slice(0, 7) } }; } } catch {}
+window.__eq = { EQ, get S() { return EQS; } };
+function eqSave() { store.set('triber_eq', JSON.stringify(EQS)); }
+function eqCtx() {
+  if (EQ.ctx) return EQ.ctx;
+  const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+  EQ.ctx = new AC();
+  EQ.pre = EQ.ctx.createGain();
+  [3, 7].forEach(m => { EQ.nodes[m] = EQ_BANDS[m].map(b => { const n = EQ.ctx.createBiquadFilter(); n.type = b.t; n.frequency.value = b.f; n.Q.value = b.q; n.gain.value = 0; return n; }); });
+  EQ.an = EQ.ctx.createAnalyser(); EQ.an.fftSize = 2048; EQ.an.smoothingTimeConstant = 0.82; EQ.buf = new Uint8Array(EQ.an.frequencyBinCount);
+  eqApply();
+  return EQ.ctx;
+}
+function eqGains() { return EQS.g[EQS.mode]; }
+function eqApply() {
+  if (!EQ.ctx) return;
+  [3, 7].forEach(m => EQ.nodes[m].forEach((n, i) => { n.gain.value = (m === EQS.mode && EQS.on) ? EQS.g[m][i] : 0; }));
+  const maxPos = EQS.on ? Math.max(0, ...eqGains()) : 0;
+  EQ.pre.gain.value = Math.pow(10, -maxPos / 20);
+  if (EQ.built) eqWire();
+}
+function eqWire() {
+  try { EQ.src.disconnect(); EQ.pre.disconnect(); EQ.nodes[3].concat(EQ.nodes[7]).forEach(n => n.disconnect()); EQ.an.disconnect(); } catch {}
+  let last = EQ.src;
+  if (EQS.on) { last.connect(EQ.pre); last = EQ.pre; EQ.nodes[EQS.mode].forEach(n => { last.connect(n); last = n; }); }
+  last.connect(EQ.an); EQ.an.connect(EQ.ctx.destination);
+}
+function eqProbeCors() {
+  return new Promise(resolve => {
+    if (!audio.getAttribute('src')) { audio.crossOrigin = 'anonymous'; return resolve(true); }
+    if (audio.crossOrigin === 'anonymous' && audio.readyState > 0) return resolve(true);
+    const t = audio.currentTime || 0, was = !audio.paused, src = audio.getAttribute('src');
+    EQ.probing = true; audio.crossOrigin = 'anonymous'; audio.preload = 'metadata';
+    let to;
+    const clean = () => { clearTimeout(to); audio.removeEventListener('loadedmetadata', ok); audio.removeEventListener('error', bad); EQ.probing = false; };
+    const ok = () => { clean(); if (t > 0) { try { audio.currentTime = t; } catch {} } if (was) audio.play().catch(() => {}); resolve(true); };
+    const bad = () => { clean(); audio.removeAttribute('crossorigin'); audio.setAttribute('src', src); audio.load(); resolve(false); };
+    audio.addEventListener('loadedmetadata', ok); audio.addEventListener('error', bad);
+    to = setTimeout(bad, 10000);
+    audio.load();
+  });
+}
+async function eqEnable() {
+  if (EQ.built) return true;
+  if (!eqCtx()) { toast('Your browser does not support the equaliser.'); return false; }
+  const good = await eqProbeCors();
+  if (!good) { toast('This mix is hosted somewhere that blocks the equaliser. It plays flat instead.'); return false; }
+  try { EQ.src = EQ.ctx.createMediaElementSource(audio); EQ.built = true; eqWire(); }
+  catch (e) { toast('Could not start the equaliser.'); return false; }
+  try { await EQ.ctx.resume(); } catch {}
+  return true;
+}
+function fmtDb(v) { return (v > 0 ? '+' : '') + v.toFixed(v % 1 ? 1 : 0); }
+function eqRenderFaders() {
+  const bands = EQ_BANDS[EQS.mode], g = eqGains();
+  $('#eqFaders').innerHTML = bands.map((b, i) => `<div class="fd"><span class="db" data-db="${i}">${fmtDb(g[i])}</span><div class="slot" role="slider" tabindex="0" data-i="${i}" aria-label="${b.l} Hz gain" aria-orientation="vertical" aria-valuemin="-12" aria-valuemax="12" aria-valuenow="${g[i]}" aria-valuetext="${fmtDb(g[i])} dB"><div class="cap" style="top:${(1 - (g[i] + 12) / 24) * 100}%"></div></div><span class="hz">${b.l}</span></div>`).join('');
+  document.querySelectorAll('#eq .seg button').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.mode === EQS.mode)));
+  $('#eqPow').textContent = EQS.on ? 'ON' : 'OFF'; $('#eqPow').setAttribute('aria-pressed', String(EQS.on));
+  $('#eq').classList.toggle('off', !EQS.on);
+  $('#bEq').setAttribute('aria-pressed', String(EQS.on));
+  eqDraw();
+}
+function eqSetGain(i, v, silent) {
+  v = Math.max(-12, Math.min(12, Math.round(v * 2) / 2));
+  eqGains()[i] = v; EQS.preset = 'Custom'; $('#eqPreset').value = 'Custom';
+  const slot = document.querySelector(`#eq .slot[data-i="${i}"]`);
+  if (slot) { slot.querySelector('.cap').style.top = (1 - (v + 12) / 24) * 100 + '%'; slot.setAttribute('aria-valuenow', v); slot.setAttribute('aria-valuetext', fmtDb(v) + ' dB'); document.querySelector(`#eq .db[data-db="${i}"]`).textContent = fmtDb(v); }
+  eqApply(); eqDraw(); if (!silent) eqSave();
+}
+function eqDraw() {
+  const cv = $('#eqCv'); if (!cv || $('#eq').hidden) return;
+  const c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  c.clearRect(0, 0, W, H);
+  const xOf = f => (Math.log10(f) - Math.log10(20)) / (Math.log10(20000) - Math.log10(20)) * W;
+  const yOf = db => H / 2 - (db / 15) * (H / 2);
+  c.strokeStyle = 'rgba(255,255,255,.07)'; c.lineWidth = 1; c.fillStyle = 'rgba(255,255,255,.28)'; c.font = '16px ui-monospace,Menlo,monospace';
+  [50, 100, 200, 500, 1000, 2000, 5000, 10000].forEach(f => { const x = xOf(f); c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); c.fillText(f >= 1000 ? f / 1000 + 'k' : f, x + 3, H - 5); });
+  [-12, -6, 0, 6, 12].forEach(d => { c.strokeStyle = d === 0 ? 'rgba(255,255,255,.22)' : 'rgba(255,255,255,.07)'; c.beginPath(); c.moveTo(0, yOf(d)); c.lineTo(W, yOf(d)); c.stroke(); });
+  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e8a34c';
+  if (EQ.built && EQ.an && !audio.paused) {
+    EQ.an.getByteFrequencyData(EQ.buf);
+    const sr = EQ.ctx.sampleRate, n = EQ.buf.length, bars = 56; c.fillStyle = accent; c.globalAlpha = 0.28;
+    for (let k = 0; k < bars; k++) {
+      const f0 = 20 * Math.pow(1000, k / bars), f1 = 20 * Math.pow(1000, (k + 1) / bars);
+      let i0 = Math.floor(f0 / (sr / 2) * n), i1 = Math.max(i0 + 1, Math.ceil(f1 / (sr / 2) * n)), m = 0;
+      for (let i = i0; i < i1 && i < n; i++) m = Math.max(m, EQ.buf[i]);
+      const x0 = xOf(f0), x1 = xOf(f1), h = (m / 255) * H * 0.95;
+      c.fillRect(x0 + 1, H - h, Math.max(1, x1 - x0 - 2), h);
+    }
+    c.globalAlpha = 1;
+  }
+  const bands = EQ_BANDS[EQS.mode], nodes = eqCtx() ? EQ.nodes[EQS.mode] : null, g = eqGains();
+  const N = 120, fr = new Float32Array(N), mag = new Float32Array(N), ph = new Float32Array(N), tot = new Float32Array(N).fill(1);
+  for (let k = 0; k < N; k++) fr[k] = 20 * Math.pow(1000, k / (N - 1));
+  if (nodes) nodes.forEach((nd, i) => { const saved = nd.gain.value; nd.gain.value = g[i]; nd.getFrequencyResponse(fr, mag, ph); nd.gain.value = saved; for (let k = 0; k < N; k++) tot[k] *= mag[k]; });
+  c.beginPath(); for (let k = 0; k < N; k++) { const db = 20 * Math.log10(tot[k]), x = xOf(fr[k]), y = yOf(Math.max(-15, Math.min(15, db))); k ? c.lineTo(x, y) : c.moveTo(x, y); }
+  c.lineWidth = 3; c.strokeStyle = EQS.on ? '#7fb7a3' : 'rgba(168,137,159,.7)'; c.stroke();
+  bands.forEach((b, i) => { c.fillStyle = EQS.on ? '#f3e9e6' : '#a8899f'; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 5, 0, 7); c.fill(); });
+}
+function eqLoop() { cancelAnimationFrame(EQ.raf); if ($('#eq').hidden) return; eqDraw(); if (EQ.built && !audio.paused) EQ.raf = requestAnimationFrame(eqLoop); }
+function eqInit() {
+  $('#eqPreset').innerHTML = Object.keys(EQ_PRESETS).concat('Custom').map(n => `<option>${n}</option>`).join('');
+  $('#eqPreset').value = EQS.preset in EQ_PRESETS ? EQS.preset : 'Custom';
+  eqRenderFaders();
+  $('#bEq').addEventListener('click', () => {
+    const h = $('#eq').hidden; $('#eq').hidden = !h; $('#bEq').setAttribute('aria-expanded', String(h));
+    if (h) { eqCtx(); eqRenderFaders(); eqLoop(); }
+  });
+  $('#eq .seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; EQS.mode = +b.dataset.mode; eqApply(); eqSave(); eqRenderFaders(); });
+  $('#eqPreset').addEventListener('change', e => { const pr = EQ_PRESETS[e.target.value]; if (!pr) return; EQS.preset = e.target.value; EQS.g[3] = pr[0].slice(); EQS.g[7] = pr[1].slice(); eqApply(); eqSave(); eqRenderFaders(); });
+  $('#eqPow').addEventListener('click', async () => {
+    EQS.on = !EQS.on; eqSave(); eqCtx(); eqRenderFaders();
+    if (EQS.on) { const ok = await eqEnable(); if (!ok) { EQS.on = false; eqSave(); } }
+    eqApply(); eqRenderFaders(); eqLoop();
+  });
+  const box = $('#eqFaders'); let drag = null;
+  const setFromY = (slot, y) => { const r = slot.getBoundingClientRect(); const t = Math.min(1, Math.max(0, (y - r.top) / r.height)); eqSetGain(+slot.dataset.i, (1 - t) * 24 - 12, true); };
+  box.addEventListener('pointerdown', e => { const s = e.target.closest('.slot'); if (!s) return; drag = s; s.setPointerCapture(e.pointerId); s.focus(); setFromY(s, e.clientY); e.preventDefault(); });
+  box.addEventListener('pointermove', e => { if (drag) setFromY(drag, e.clientY); });
+  const end = () => { if (drag) { drag = null; eqSave(); } };
+  box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+  box.addEventListener('dblclick', e => { const s = e.target.closest('.slot'); if (s) eqSetGain(+s.dataset.i, 0); });
+  box.addEventListener('keydown', e => {
+    const s = e.target.closest('.slot'); if (!s) return; const i = +s.dataset.i, v = eqGains()[i]; let n = null;
+    if (e.key === 'ArrowUp' || e.key === 'ArrowRight') n = v + 0.5; else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') n = v - 0.5;
+    else if (e.key === 'PageUp') n = v + 3; else if (e.key === 'PageDown') n = v - 3; else if (e.key === 'Home') n = 12; else if (e.key === 'End') n = -12; else if (e.key === '0') n = 0;
+    if (n !== null) { e.preventDefault(); eqSetGain(i, n); }
+  });
+  audio.addEventListener('play', () => { if (EQ.ctx && EQ.ctx.state === 'suspended') EQ.ctx.resume().catch(() => {}); eqLoop(); });
+}
+
 function startPlayback() {
   const m = S.cur; if (!m) return;
   if (!m.audio_url) { toast('This mix has no audio attached yet.'); return; }
-  audio.play().catch(() => { S.playing = false; renderPlayState(); toast('Could not load this mix. Check your connection and try again.'); });
+  const go = () => audio.play().catch(() => { S.playing = false; renderPlayState(); toast('Could not load this mix. Check your connection and try again.'); });
+  if (EQS.on && !EQ.built) { eqEnable().then(ok => { if (!ok) { EQS.on = false; eqSave(); eqRenderFaders(); } go(); }); return; }
+  go();
 }
 function togglePlay() { if (!S.cur) return; if (audio.paused) startPlayback(); else audio.pause(); }
 
@@ -580,7 +850,7 @@ audio.addEventListener('timeupdate', () => {
   const d = audio.currentTime - S.lastT; if (d > 0 && d < 2) S.listened += d; S.lastT = audio.currentTime;
   updateProgress(); renderNow(); flushProgress(false);
 });
-audio.addEventListener('error', () => { if (S.cur && audio.src) { S.playing = false; renderPlayState(); toast('Could not load this mix.'); } });
+audio.addEventListener('error', () => { if (EQ.probing) return; if (EQ.built && S.cur && audio.src) { S.playing = false; renderPlayState(); toast('This mix is hosted somewhere that blocks the equaliser. Reload the page to play it without EQ.'); return; } if (S.cur && audio.src) { S.playing = false; renderPlayState(); toast('Could not load this mix.'); } });
 addEventListener('pagehide', () => flushProgress(true, true));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushProgress(true, true); });
 
@@ -671,6 +941,7 @@ function intro() {
 
 /* ---------------- boot ---------------- */
 (async function boot() {
+  eqInit();
   const vm = document.querySelector('meta[name=app-version]'); if (vm) { const v = $('#ver'); if (v) v.textContent = 'v' + vm.content; console.info('TRIBER v' + vm.content); }
   intro();
   renderMachine(); renderPlayState();
