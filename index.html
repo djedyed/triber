@@ -6,7 +6,7 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
-<meta name="app-version" content="1.2.0">
+<meta name="app-version" content="1.3.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.2.0"></script>
+<script src="config.js?v=1.3.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -51,7 +51,7 @@ a{color:inherit}
 main{max-width:1180px;margin:0 auto;padding:0 20px 40px}
 .stage{display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:44px;padding:40px 0 28px;align-items:start}
 .machine-col{display:flex;flex-direction:column;align-items:center;gap:18px}
-.machine{width:260px;height:230px;display:flex;align-items:center;justify-content:center;position:relative}
+.machine{width:100%;max-width:300px;min-height:230px;display:flex;align-items:center;justify-content:center;position:relative}
 .skins{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:290px}
 .skin{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:99px;padding:6px 12px;font-size:12px}
 .skin[aria-checked=true]{background:var(--accent);color:#150b1a;font-weight:700;border-color:transparent}
@@ -179,6 +179,10 @@ footer b{color:var(--text);letter-spacing:.14em}
 .gram svg{position:absolute;left:0;top:0}
 .gram .rec{position:absolute;bottom:4px;left:28px;width:104px;height:104px;border-radius:50%;background:repeating-radial-gradient(circle,#241129 0 3px,#150b1a 3px 6px);box-shadow:inset 0 0 0 2px var(--line)}
 .playing .gram .rec{animation:spin 3.4s linear infinite}
+.machine svg.sk{display:block;width:100%;height:auto;filter:drop-shadow(0 12px 16px rgba(0,0,0,.5))}
+.machine svg.sk.tall{width:70%}
+.sk .lt{font-family:'Caveat','Bradley Hand','Segoe Script',cursive;font-weight:700}
+.sk .ng{transform-box:fill-box;transform-origin:center}
 .cass{width:260px;filter:drop-shadow(0 12px 18px rgba(0,0,0,.5))}
 .cass svg{display:block;width:100%;height:auto}
 .cass .lt{font-family:'Caveat','Bradley Hand','Segoe Script',cursive;font-weight:700;fill:#2a2230}
@@ -250,7 +254,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.2.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.3.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -536,17 +540,178 @@ function cassFrame(now) {
 }
 requestAnimationFrame(cassFrame);
 
+/* ---------- Realistic skins (v1.3): reel-to-reel, gramophone, 8-track, turntable ---------- */
+const SK = { last: 0, arm: null, vu: [0, 0], lv: [0, 0], buf: null };
+const NSVG = 'http://www.w3.org/2000/svg';
+function circInt(c1x, c1y, r1, c2x, c2y, r2) {
+  const dx = c2x - c1x, dy = c2y - c1y, d = Math.hypot(dx, dy), a = (r1 * r1 - r2 * r2 + d * d) / (2 * d), h = Math.sqrt(Math.max(0, r1 * r1 - a * a));
+  const px = c1x + a * dx / d, py = c1y + a * dy / d;
+  return [[px + h * dy / d, py - h * dx / d], [px - h * dy / d, py + h * dx / d]];
+}
+function spin(id, deg) { const el = document.getElementById(id); if (!el) return; el._a = (el._a || 0) + deg; el.style.transform = `rotate(${el._a}deg)`; }
+function setA(id, k, v) { const el = document.getElementById(id); if (el) el.setAttribute(k, v); }
+function tapeR(a, b, p, side) { const a2 = a * a, b2 = b * b; return Math.sqrt(side === 'L' ? a2 + (b2 - a2) * (1 - p) : a2 + (b2 - a2) * p); }
+function vuLevel(ch, playing) {
+  if (!playing) return 0;
+  if (EQ.built && EQ.an) { if (!SK.buf) SK.buf = new Uint8Array(EQ.an.frequencyBinCount); EQ.an.getByteFrequencyData(SK.buf); let sum = 0; const n = ch ? 60 : 24; for (let i = ch ? 24 : 1; i < n + (ch ? 24 : 1); i++) sum += SK.buf[i]; return Math.min(1, sum / (n * 255) * 1.7); }
+  const t = audio.currentTime; return Math.max(0, Math.min(1, 0.42 + 0.2 * Math.sin(t * 5.1 + ch) + 0.14 * Math.sin(t * 11.3 + ch * 2) + 0.07 * Math.sin(t * 23.7)));
+}
+const wood = (id) => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0dcb0"/><stop offset=".5" stop-color="#d4b57c"/><stop offset="1" stop-color="#a9854b"/></linearGradient>`;
+
+function reelHTML() {
+  const wedge = a => `<path d="M0 0" transform="rotate(${a})"/>`;
+  const cut = [0, 120, 240].map(a => `<path d="M30 -26 Q52 -42 78 -34 Q86 -14 80 4 Q56 14 34 8 Z" fill="#000" transform="rotate(${a})"/>`).join('');
+  const reel = (id, cx, cy) => `<g transform="translate(${cx} ${cy})"><circle r="92" fill="#0b0907"/><circle id="${id}pk" r="60" fill="url(#rtp)"/>
+    <g id="${id}fl" class="ng" style="transform-box:view-box;transform-origin:0 0"><mask id="${id}m"><circle r="92" fill="#fff"/>${cut}</mask><g mask="url(#${id}m)"><circle r="92" fill="url(#rgold)"/><circle r="90" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/><circle r="40" fill="#a98f4f"/></g>
+    <circle r="34" fill="#17130f" stroke="#3b342b" stroke-width="3"/>${[0, 120, 240].map(a => `<rect x="-3" y="-30" width="6" height="14" fill="#6a5f4a" transform="rotate(${a})"/>`).join('')}<circle r="9" fill="url(#rsil)"/><circle r="3" fill="#222"/></g></g>`;
+  const knobs = [60, 100, 150, 190].map(x => `<circle cx="${x}" cy="348" r="11" fill="#2a2a2e" stroke="#555" stroke-width="1.5"/><path d="M${x} 348V339" stroke="#f3e9e6" stroke-width="2" stroke-linecap="round"/>`).join('');
+  const btns = [0, 1, 2, 3, 4, 5].map(i => `<rect x="${262 + i * 19}" y="335" width="16" height="26" rx="2" fill="${i === 4 ? '#3a8f6a' : '#2b2b30'}" stroke="#555"/>`).join('');
+  const meter = (id, x) => `<rect x="${x}" y="276" width="76" height="52" rx="4" fill="#eadfb9" stroke="#222" stroke-width="2"/><path d="M${x + 10} 306 A28 28 0 0 1 ${x + 66} 306" fill="none" stroke="#3a3228" stroke-width="1.2"/><path d="M${x + 52} 289 A28 28 0 0 1 ${x + 66} 306" fill="none" stroke="#c0392b" stroke-width="3"/><text x="${x + 38}" y="323" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="800" fill="#3a3228">VU</text><g id="${id}" style="transform-origin:${x + 38}px 326px"><path d="M${x + 38} 326L${x + 38} 292" stroke="#7a1c14" stroke-width="1.6"/></g>`;
+  return `<svg class="sk" viewBox="0 0 400 380" role="img" aria-label="Reel-to-reel tape deck playing"><defs>
+  <radialGradient id="rgold" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="#f1e2b0"/><stop offset=".7" stop-color="#d9c585"/><stop offset="1" stop-color="#b79f5c"/></radialGradient>
+  <radialGradient id="rtp" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="#8a5b38"/><stop offset="1" stop-color="#3a2416"/></radialGradient>
+  <radialGradient id="rsil" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#8d8d92"/></radialGradient>
+  <linearGradient id="rbody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcd6cc"/><stop offset="1" stop-color="#a8a298"/></linearGradient></defs>
+  <rect x="15" y="100" width="370" height="272" rx="8" fill="url(#rbody)" stroke="#6d675e" stroke-width="2"/>
+  <rect x="15" y="262" width="370" height="110" rx="6" fill="#18181b"/>
+  <rect x="150" y="186" width="100" height="40" rx="3" fill="#cfc9be" stroke="#7a746a"/><text x="200" y="212" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="13" letter-spacing="2" fill="#2a2630">TRIBER</text>
+  ${reel('rl', 105, 100)}${reel('rr', 295, 100)}
+  <path id="rtape" d="" fill="none" stroke="#6b4428" stroke-width="2.6" stroke-linejoin="round"/>
+  <circle cx="95" cy="215" r="18" fill="url(#rsil)" stroke="#6b6b70" stroke-width="2"/><circle cx="95" cy="215" r="5" fill="#555"/>
+  <circle cx="305" cy="215" r="18" fill="url(#rsil)" stroke="#6b6b70" stroke-width="2"/><circle cx="305" cy="215" r="5" fill="#555"/>
+  <circle cx="52" cy="230" r="8" fill="url(#rsil)"/><circle cx="348" cy="230" r="8" fill="url(#rsil)"/>
+  ${meter('rv0', 40)}${meter('rv1', 130)}
+  <rect x="258" y="274" width="116" height="40" rx="4" fill="#0a0505" stroke="#333"/><text id="rcount" x="316" y="302" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-weight="700" font-size="22" fill="#ff3b2f">00:00:00</text>
+  ${knobs}${btns}</svg>`;
+}
+function reelFrame(p, playing, dt, rm) {
+  if (!document.getElementById('rlfl')) return;
+  const rL = tapeR(36, 82, p, 'L'), rR = tapeR(36, 82, p, 'R');
+  if (playing && !rm) { spin('rlfl', -(150 / rL) * dt * 57.2958); spin('rrfl', -(150 / rR) * dt * 57.2958); }
+  setA('rlpk', 'r', rL.toFixed(1)); setA('rrpk', 'r', rR.toFixed(1));
+  const L = tangentPt(105, 100, rL, 95, 215, true), R = tangentPt(295, 100, rR, 305, 215, false);
+  setA('rtape', 'd', `M${L[0].toFixed(1)} ${L[1].toFixed(1)}L95 215L160 233L240 233L305 215L${R[0].toFixed(1)} ${R[1].toFixed(1)}`);
+  const ct = audio.currentTime || 0, mm = Math.floor(ct / 60), ss = Math.floor(ct % 60), ff = Math.floor((ct % 1) * 30);
+  const pad = n => String(n).padStart(2, '0'), c = document.getElementById('rcount'); const txt = `${pad(mm)}:${pad(ss)}:${pad(ff)}`; if (c && c.textContent !== txt) c.textContent = txt;
+  [0, 1].forEach(ch => { const target = vuLevel(ch, playing); SK.lv[ch] += (target - SK.lv[ch]) * Math.min(1, dt * (target > SK.lv[ch] ? 14 : 5)); const el = document.getElementById('rv' + ch); if (el) el.style.transform = `rotate(${-44 + SK.lv[ch] * 80}deg)`; });
+}
+
+function gramHTML() {
+  const petals = Array.from({ length: 9 }, (_, i) => { const a = i * 40 * Math.PI / 180; return `<circle cx="${(Math.cos(a) * 70).toFixed(1)}" cy="${(Math.sin(a) * 66).toFixed(1)}" r="30" fill="url(#gw)" stroke="#8a6a38" stroke-width="1.5"/>`; }).join('');
+  const rings = [64, 52, 40, 29, 19].map((r, i) => `<ellipse rx="${r * 1.12}" ry="${r}" fill="${i % 2 ? '#d9bd86' : '#b99357'}" stroke="#7a5a2e" stroke-width="1"/>`).join('');
+  const arches = [0, 1, 2].map(i => `<path d="M${80 + i * 38} 352V310Q${80 + i * 38} 292 ${97 + i * 38} 292T${114 + i * 38} 310V352Z" fill="#c4a066" stroke="#7a5a2e" stroke-width="1.5"/><path d="M${88 + i * 38} 346V312Q${88 + i * 38} 300 ${97 + i * 38} 300T${106 + i * 38} 312V346Z" fill="#9c7840" opacity=".6"/>`).join('');
+  const spokes = [0, 60, 120, 180, 240, 300].map(a => `<rect x="-2.5" y="-26" width="5" height="22" rx="2" fill="#7a5a2e" transform="rotate(${a})"/>`).join('');
+  return `<svg class="sk" viewBox="0 0 400 400" role="img" aria-label="Wooden gramophone playing"><defs>${wood('gw')}
+  <radialGradient id="grec" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2a2a30"/><stop offset=".6" stop-color="#101012"/><stop offset="1" stop-color="#26262b"/></radialGradient></defs>
+  <polygon points="195,72 352,226 338,262 100,150" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2"/>
+  ${[0.25, 0.45, 0.65, 0.85].map(t => { const x1 = 195 + (352 - 195) * t, y1 = 72 + (226 - 72) * t, x2 = 100 + (338 - 100) * t, y2 = 150 + (262 - 150) * t; return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="#8a6a38" stroke-width="2" opacity=".7"/>`; }).join('')}
+  <g transform="translate(140 108) rotate(-30)"><g transform="scale(1 .86)">${petals}<ellipse rx="86" ry="78" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2"/>${rings}</g></g>
+  <circle cx="338" cy="252" r="20" fill="#b99357" stroke="#7a5a2e" stroke-width="2"/><rect x="326" y="256" width="26" height="20" fill="#c4a066" stroke="#7a5a2e"/>
+  <polygon points="48,274 352,274 340,256 62,256" fill="#e6cf9c" stroke="#7a5a2e" stroke-width="2"/>
+  <rect x="48" y="274" width="304" height="94" rx="8" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2.5"/>
+  ${arches}
+  <circle cx="268" cy="322" r="36" fill="#b99357" stroke="#7a5a2e" stroke-width="2.5"/><circle cx="268" cy="322" r="28" fill="#e3c88f" stroke="#7a5a2e"/><g transform="translate(268 322)"><g id="gcog" style="transform-origin:0 0">${spokes}<circle r="8" fill="#7a5a2e"/></g></g>
+  <g transform="translate(352 322)"><g id="gcrank" style="transform-origin:0 0"><path d="M0 0L22 0" stroke="#8a6a38" stroke-width="5" stroke-linecap="round"/><circle cx="22" cy="0" r="6" fill="#c9a24a" stroke="#6f5320"/></g></g>
+  ${[70, 195, 330].map(x => `<path d="M${x - 14} 368H${x + 14}L${x + 8} 386H${x - 8}Z" fill="#9c7840" stroke="#7a5a2e"/>`).join('')}
+  <g transform="translate(170 262) scale(1 .24)"><circle r="112" fill="#17120d"/><g id="grec" style="transform-origin:0 0"><circle r="106" fill="url(#grec)"/>${[96, 84, 70, 58].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>`).join('')}<path d="M-100 0A100 100 0 0 1 0 -100" stroke="rgba(255,255,255,.16)" stroke-width="10" fill="none"/><path d="M100 0A100 100 0 0 1 0 100" stroke="rgba(255,255,255,.16)" stroke-width="10" fill="none"/><circle r="34" style="fill:var(--accent)"/><circle r="4" fill="#0b0b0d"/></g></g>
+  <g id="garm"><line id="gal" x1="340" y1="250" x2="270" y2="268" stroke="#c9a24a" stroke-width="5" stroke-linecap="round"/><circle cx="340" cy="250" r="9" fill="#d8b45a" stroke="#6f5320" stroke-width="1.5"/><rect id="gah" x="262" y="263" width="18" height="8" rx="2" fill="#b0893a" stroke="#6f5320" transform="rotate(10 270 268)"/></g></svg>`;
+}
+function gramFrame(p, playing, dt, rm) {
+  if (!document.getElementById('grec')) return;
+  if (playing && !rm) { spin('grec', 200 * dt); spin('gcog', 90 * dt); spin('gcrank', 90 * dt); }
+  const target = playing ? 98 - 52 * p : 150;
+  SK.arm = SK.arm === null ? target : SK.arm + (target - SK.arm) * Math.min(1, dt * 3.2);
+  const nx = 170 + SK.arm * 0.98, ny = 262 + SK.arm * 0.24 * 0.35 + 6;
+  setA('gal', 'x2', nx.toFixed(1)); setA('gal', 'y2', ny.toFixed(1)); setA('gah', 'x', (nx - 8).toFixed(1)); setA('gah', 'y', (ny - 5).toFixed(1)); setA('gah', 'transform', `rotate(10 ${nx} ${ny})`);
+}
+
+function eightHTML() {
+  const spokes = [0, 60, 120, 180, 240, 300].map(a => `<path d="M14 -4L70 -14Q74 0 70 14L14 4Z" fill="#b9b79a" stroke="#8f8d72" stroke-width="1.5" transform="rotate(${a})"/>`).join('');
+  const prog = [1, 2, 3, 4].map(n => `<circle cx="${60 + n * 36}" cy="14" r="7" class="ep" data-n="${n}" fill="#4a1d1d"/>`).join('');
+  return `<svg class="sk tall" viewBox="0 0 300 400" role="img" aria-label="8-track cartridge playing"><defs>
+  <linearGradient id="esh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e5e3cb"/><stop offset="1" stop-color="#c6c4a6"/></linearGradient>
+  <radialGradient id="etp" cx=".4" cy=".35" r=".9"><stop offset="0" stop-color="#5c3342"/><stop offset="1" stop-color="#241019"/></radialGradient></defs>
+  <rect x="6" y="6" width="288" height="388" rx="10" fill="url(#esh)" stroke="#8f8d72" stroke-width="2.5"/>
+  <rect x="22" y="26" width="256" height="262" rx="8" fill="#c1bfa1" stroke="#9a987c"/>
+  <rect x="48" y="38" width="96" height="26" rx="3" fill="#15130f"/><rect x="58" y="44" width="76" height="3" fill="#6b4a3a"/>
+  <path id="etape" d="" fill="none" stroke="#2d1621" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="226" cy="62" r="30" fill="#17120f" stroke="#3b342b" stroke-width="3"/><circle cx="226" cy="62" r="11" fill="#d8d6bd" stroke="#8f8d72" stroke-width="2"/>
+  <circle cx="150" cy="190" r="88" fill="#d0ceb2" stroke="#9a987c" stroke-width="2"/>
+  <circle id="epk" cx="150" cy="190" r="56" fill="url(#etp)"/>
+  <g transform="translate(150 190)"><g id="ehub" style="transform-origin:0 0">${spokes}<circle r="16" fill="#d8d6bd" stroke="#8f8d72" stroke-width="2"/><circle r="8" fill="#c9a24a" stroke="#6f5320"/><circle r="2.6" fill="#241019"/></g></g>
+  <circle cx="40" cy="274" r="6" fill="#9a987c"/><circle cx="260" cy="274" r="6" fill="#9a987c"/>
+  <g transform="translate(0 288)">${prog}</g>
+  <rect x="30" y="316" width="240" height="64" rx="5" fill="#f1ecd8" stroke="#8f8d72"/><rect x="30" y="316" width="240" height="10" rx="3" fill="#c0392b"/>
+  <text id="et1" x="150" y="352" text-anchor="middle" class="lt" font-size="28" fill="#2a2230"></text><text id="et2" x="150" y="372" text-anchor="middle" class="lt" font-size="17" fill="#4a4152"></text></svg>`;
+}
+function eightFrame(p, playing, dt, rm) {
+  if (!document.getElementById('ehub')) return;
+  const r = 28 + 28 * (1 - p);
+  if (playing && !rm) spin('ehub', -(90 / r) * dt * 57.2958);
+  setA('epk', 'r', r.toFixed(1));
+  const q = tangentPt(150, 190, r, 215, 80, false);
+  setA('etape', 'd', `M${q[0].toFixed(1)} ${q[1].toFixed(1)}L214 92L226 66L100 52`);
+}
+function eightLabel(m, tr) {
+  if (S.skin !== 'eight' || !m || !document.getElementById('et1')) return;
+  const t1 = document.getElementById('et1'), t2 = document.getElementById('et2');
+  t1.textContent = tr ? tr.title : m.title; t2.textContent = (tr && tr.artist) || m.artist || '';
+  fitText(t1, 28, 220); fitText(t2, 17, 220);
+  const prog = (S.tracks.length ? currentTrack() : 0) % 4 + 1;
+  document.querySelectorAll('.ep').forEach(c => c.setAttribute('fill', +c.dataset.n === prog ? '#ff5a3c' : '#4a1d1d'));
+}
+
+function vinylHTML() {
+  const strobe = `<circle r="134" fill="none" stroke="#e7c36a" stroke-width="7" stroke-dasharray="2.2 3.6"/>`;
+  return `<svg class="sk" viewBox="0 0 460 340" role="img" aria-label="Turntable playing"><defs>
+  <linearGradient id="vpl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#303a49"/><stop offset="1" stop-color="#151a22"/></linearGradient>
+  <linearGradient id="vgold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5dc8a"/><stop offset=".5" stop-color="#b98a2c"/><stop offset="1" stop-color="#e9c96f"/></linearGradient>
+  <radialGradient id="vrec" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#26262c"/><stop offset=".7" stop-color="#0e0e11"/><stop offset="1" stop-color="#1c1c21"/></radialGradient></defs>
+  <rect x="6" y="6" width="448" height="328" rx="16" fill="url(#vpl)" stroke="#0a0d12" stroke-width="3"/>
+  ${[[34, 312], [426, 312], [34, 28], [426, 28]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="13" fill="#0b0e13" stroke="#2c3441" stroke-width="2"/>`).join('')}
+  <g transform="translate(190 170)"><circle r="146" fill="#0d1016"/><g id="vplat" style="transform-origin:0 0"><circle r="142" fill="url(#vgold)"/>${strobe}<circle r="128" fill="#111"/>
+  <circle r="116" fill="url(#vrec)"/>${[104, 92, 80, 68, 58].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.055)" stroke-width="2"/>`).join('')}
+  <path d="M-110 0A110 110 0 0 1 0 -110" stroke="rgba(255,255,255,.13)" stroke-width="14" fill="none"/><path d="M110 0A110 110 0 0 1 0 110" stroke="rgba(255,255,255,.13)" stroke-width="14" fill="none"/>
+  <circle r="42" style="fill:var(--accent)"/><text y="5" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="13" letter-spacing="2" fill="#150b1a">TRIBER</text><circle cx="0" cy="-22" r="2" fill="#150b1a"/><circle r="3.4" fill="#0b0b0d" cy="22"/></g></g>
+  <circle cx="40" cy="62" r="19" fill="url(#vgold)" stroke="#6f5320" stroke-width="2"/><circle id="vled" cx="62" cy="96" r="4" fill="#5a1414"/>
+  <rect x="26" y="262" width="64" height="26" rx="4" fill="#232b38" stroke="#e7c36a" stroke-width="1.5"/><text x="58" y="280" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="10" fill="#e7c36a">START·STOP</text>
+  <rect x="418" y="150" width="14" height="150" rx="3" fill="#080a0e" stroke="#2c3441"/><rect x="408" y="206" width="34" height="14" rx="3" fill="url(#vgold)" stroke="#6f5320"/>
+  <circle cx="405" cy="65" r="26" fill="url(#vgold)" stroke="#6f5320" stroke-width="2"/><circle cx="405" cy="65" r="11" fill="#2a2412"/>
+  <g id="varm"><line id="val" x1="405" y1="65" x2="300" y2="200" stroke="url(#vgold)" stroke-width="6" stroke-linecap="round"/><rect id="vah" x="0" y="0" width="22" height="11" rx="3" fill="#b98a2c" stroke="#6f5320"/></g></svg>`;
+}
+function vinylFrame(p, playing, dt, rm) {
+  if (!document.getElementById('vplat')) return;
+  if (playing && !rm) spin('vplat', 200 * dt);
+  const led = document.getElementById('vled'); if (led) led.setAttribute('fill', playing ? '#ff3b2f' : '#5a1414');
+  const target = playing ? 115 - 58 * p : 152;
+  SK.arm = SK.arm === null ? target : SK.arm + (target - SK.arm) * Math.min(1, dt * 3);
+  const pts = circInt(405, 65, 185, 190, 170, SK.arm), n = pts[0][1] > pts[1][1] ? pts[0] : pts[1];
+  const ang = Math.atan2(n[1] - 65, n[0] - 405) * 57.2958;
+  setA('val', 'x2', n[0].toFixed(1)); setA('val', 'y2', n[1].toFixed(1));
+  setA('vah', 'x', (n[0] - 11).toFixed(1)); setA('vah', 'y', (n[1] - 5).toFixed(1)); setA('vah', 'transform', `rotate(${(ang - 12).toFixed(1)} ${n[0].toFixed(1)} ${n[1].toFixed(1)})`);
+}
+let _skSkin = '';
+function skinFrame(now) {
+  requestAnimationFrame(skinFrame);
+  const dt = Math.min(0.1, (now - (SK.last || now)) / 1000); SK.last = now;
+  if (_skSkin !== S.skin) { _skSkin = S.skin; SK.arm = null; }
+  const d = duration(), p = d ? Math.min(1, Math.max(0, audio.currentTime / d)) : 0;
+  const playing = !audio.paused && !audio.ended && S.playing, rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  switch (S.skin) { case 'reel': reelFrame(p, playing, dt, rm); break; case 'gramophone': gramFrame(p, playing, dt, rm); break; case 'eight': eightFrame(p, playing, dt, rm); break; case 'vinyl': vinylFrame(p, playing, dt, rm); break; }
+}
+requestAnimationFrame(skinFrame);
+
 function machineHTML(skin, mix) {
   const t = esc(mix ? `${mix.title} — ${mix.artist}` : 'Triber');
   const bars = Array.from({ length: 22 }, (_, i) => `<i style="--d:${(0.35 + (hash(mix?.title + i) % 60) / 100).toFixed(2)}s"></i>`).join('');
   switch (skin) {
-    case 'gramophone': return `<div class="gram"><svg width="240" height="170" viewBox="0 0 240 170"><path d="M118 160Q40 138 28 46Q26 8 62 4Q130-6 215 66Q226 74 215 82Q170 44 98 38Q60 36 66 68Q72 108 130 132Z" fill="var(--accent)" opacity=".92"/></svg><div class="rec"></div></div>`;
+    case 'gramophone': return gramHTML();
     case 'cassette': return cassetteHTML();
-    case 'eight': return `<div class="eight"><div class="leds">${[1,2,3,4].map(n => `<span class="${n === (S.cur ? (hash(S.cur.id) % 4) + 1 : 1) ? 'on' : ''}">${n}</span>`).join('')}</div><div class="w"><div class="h"></div><div class="b"></div><div class="h"></div></div></div>`;
-    case 'reel': return `<div class="reel"><div class="r"><b></b><i></i></div><div class="r"><b></b><i></i></div></div>`;
+    case 'eight': return eightHTML();
+    case 'reel': return reelHTML();
     case 'cd': return `<div class="cd"></div>`;
     case 'digital': return `<div class="digi"><div class="tk"><span id="tick">${t}</span></div><div class="bars">${bars}</div></div>`;
-    default: return `<div class="vinyl"><div class="lab"><i></i></div><div class="arm"><i></i></div></div>`;
+    default: return vinylHTML();
   }
 }
 function renderMachine() {
@@ -595,7 +760,7 @@ function renderNow() {
   }
   document.querySelectorAll('#tl li').forEach((li, k) => li.classList.toggle('cur', k === i));
   if (S.skin === 'digital') { const tk = $('#tick'); if (tk) tk.textContent = (tr ? `${tr.title}${tr.artist ? ' — ' + tr.artist : ''}` : `${m.title} — ${m.artist}`); }
-  cassLabel(m, tr, i);
+  cassLabel(m, tr, i); eightLabel(m, tr);
   if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
     navigator.mediaSession.metadata = new MediaMetadata({ title: tr ? tr.title : m.title, artist: tr?.artist || m.artist, album: m.title, artwork: [{ src: new URL('assets/social-512.png', location.href).href, sizes: '512x512', type: 'image/png' }] });
   }
