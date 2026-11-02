@@ -6,7 +6,7 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
-<meta name="app-version" content="1.3.0">
+<meta name="app-version" content="1.4.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.3.0"></script>
+<script src="config.js?v=1.4.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
 :root{
@@ -244,6 +244,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 .fd .cap::after{content:"";position:absolute;left:3px;right:3px;top:7px;height:2px;background:#2a1631}
 .fd .slot:focus-visible .cap{outline:2px solid var(--accent);outline-offset:2px}
 .fd .hz{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--text)}
+.tl .tm{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;letter-spacing:.02em}
 .eq-note{margin:8px 0 0;font-size:11.5px;color:var(--muted);line-height:1.4}
 .eqp.off .eq-faders,.eqp.off canvas{opacity:.55}
 @media (prefers-reduced-motion:reduce){
@@ -254,7 +255,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.3.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.4.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -388,9 +389,9 @@ let sb = null;
 const demoDb = { likes: new Set(), comments: {}, };
 const DEMO_MIXES = [
   { id:'demo-1', title:'Deep Underground House II', artist:'DJ Eddie Ed', genre:'Deep House', bpm:122, duration_sec:16, audio_url:'assets/demo-loop.mp3', allow_download:true, play_count:0, like_count:0, download_count:0, description:'Demo loop. Your real mixes appear here once the site is connected.',
-    tracks:[[0,'Lerato K','Midnight Signal'],[5,'Nomsa & The Hours','Low Light'],[10,'Tafara Moyo','Basement Prayer']] },
+    tracks:[[0,'Lerato K','Midnight Signal',122,'8A','Demo Records'],[5,'Nomsa & The Hours','Low Light',120,'9A'],[10,'Tafara Moyo','Basement Prayer',124,'8A','Demo Records']] },
   { id:'demo-2', title:'Joburg Sunrise', artist:'DJ Eddie Ed', genre:'Amapiano', bpm:112, duration_sec:16, audio_url:'assets/demo-loop.mp3', allow_download:false, play_count:0, like_count:0, download_count:0, description:'Stream-only example (download switched off).',
-    tracks:[[0,'Sipho D','Log Drum Hymn'],[8,'Zandi','Early Taxi']] },
+    tracks:[[0,'Sipho D','Log Drum Hymn',112,'5A'],[8,'Zandi','Early Taxi',113,'6A']] },
   { id:'demo-3', title:'Brick City Boombap', artist:'DJ Eddie Ed', genre:'Hip-Hop', bpm:92, duration_sec:16, audio_url:'assets/demo-loop.mp3', allow_download:true, play_count:0, like_count:0, download_count:0, description:'', tracks:[] },
 ];
 const DEMO_GENRES = ['Afro House','Amapiano','Deep House','Gqom','Hip-Hop','Kwaito','Soulful House','Techno'];
@@ -412,8 +413,8 @@ const api = {
     const { data, error } = await sb.rpc('my_likes', { p_device_id: device }); if (error) throw error; return data || [];
   },
   async tracks(mix) {
-    if (DEMO) return (mix.tracks || []).map(([s, a, t], i) => ({ start_sec: s, artist: a, title: t, position: i + 1 }));
-    const { data, error } = await sb.from('tracks').select('position,start_sec,artist,title').eq('mix_id', mix.id).order('start_sec'); if (error) throw error; return data;
+    if (DEMO) return (mix.tracks || []).map(([s, a, t, b, k, l], i) => ({ start_sec: s, artist: a, title: t, bpm: b || null, musical_key: k || null, label: l || null, position: i + 1 }));
+    const { data, error } = await sb.from('tracks').select('*').eq('mix_id', mix.id).order('start_sec'); if (error) throw error; return data;
   },
   async comments(mix) {
     if (DEMO) return demoDb.comments[mix.id] || [];
@@ -515,8 +516,8 @@ function cassLabel(m, tr, i) {
   t1.textContent = l1 || 'Untitled'; t2.textContent = l2 || '';
   $('#cpaper').setAttribute('fill', CASS_TINTS[CASS.tint]); $('#cside').textContent = CASS.side || 'A';
   const mins = Math.max(10, Math.ceil((duration() || 3600) / 600) * 10);
-  $('#clen').textContent = 'C-' + mins;
-  fitText(t1, 30, 290); fitText(t2, 19, 290);
+  $('#clen').textContent = useTrack && tr.bpm ? tr.bpm + ' BPM' + (tr.musical_key ? ' · ' + tr.musical_key : '') : 'C-' + mins;
+  fitText(t1, 30, 250); fitText(t2, 19, 250);
 }
 function cassFrame(now) {
   requestAnimationFrame(cassFrame);
@@ -752,7 +753,7 @@ function renderNow() {
   $('#nowLabel').textContent = S.playing ? 'Now playing' : 'Up next';
   if (!m) { $('#nowTxt').textContent = '—'; $('#nowIdx').textContent = ''; return; }
   if (tr) {
-    $('#nowTxt').innerHTML = `<strong>${esc(tr.title)}</strong>${tr.artist ? ` <em>${esc(tr.artist)}</em>` : ''}`;
+    $('#nowTxt').innerHTML = `<strong>${esc(tr.title)}</strong>${tr.artist ? ` <em>${esc(tr.artist)}</em>` : ''}${trackMeta(tr) ? ` <em>· ${esc(trackMeta(tr))}</em>` : ''}`;
     $('#nowIdx').textContent = `${i + 1}/${S.tracks.length}`;
   } else {
     $('#nowTxt').innerHTML = `<strong>${esc(m.title)}</strong> <em>${esc(m.artist)}</em>`;
@@ -782,10 +783,11 @@ function updateProgress() {
   const s = $('#scrub'); s.setAttribute('aria-valuenow', Math.round(f * 100)); s.setAttribute('aria-valuetext', `${mmss(t)} of ${mmss(d)}`);
   $('#cStampT').textContent = mmss(t);
 }
+const trackMeta = t => [t.bpm ? t.bpm + ' BPM' : '', t.musical_key || '', t.label || ''].filter(Boolean).join(' · ');
 function renderTracklist() {
   const ol = $('#tl');
   if (!S.tracks.length) { ol.innerHTML = `<li class="empty">No tracklist for this mix yet.</li>`; return; }
-  ol.innerHTML = S.tracks.map((t, i) => `<li><button type="button" data-t="${t.start_sec}"><time>${mmss(t.start_sec)}</time><span>${esc(t.title)}${t.artist ? ` <em>· ${esc(t.artist)}</em>` : ''}</span></button></li>`).join('');
+  ol.innerHTML = S.tracks.map((t, i) => `<li><button type="button" data-t="${t.start_sec}"><time>${mmss(t.start_sec)}</time><span>${esc(t.title)}${t.artist ? ` <em>· ${esc(t.artist)}</em>` : ''}${trackMeta(t) ? `<small class="tm">${esc(trackMeta(t))}</small>` : ''}</span></button></li>`).join('');
 }
 function renderComments() {
   const ul = $('#clist');

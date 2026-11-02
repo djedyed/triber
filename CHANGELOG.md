@@ -1,6 +1,10 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.4.0 — 2026-11-01
+- Track labels: each track can carry BPM, musical key and record label. They show in the tracklist, the “now playing” line and the cassette label.
+- Needs the 002_track_labels.sql migration on Supabase (the site still works without it, just without the extra labels).
+
 ## 1.3.0 — 2026-11-01
 - Realistic animated skins to match the cassette: reel-to-reel (gold flanges that spin, tape packs that move across, VU needles that follow the sound, tape counter), wooden gramophone (spinning record and cog, tonearm that tracks inward), 8-track cartridge (spinning spoked reel, shrinking tape pack, program lights follow the track, handwritten label) and a gold-and-slate turntable (strobe-dot platter, tonearm tracks in, start LED).
 - Skins use original artwork inspired by classic gear; no brand names.
