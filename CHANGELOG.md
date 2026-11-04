@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.4.2 — 2026-11-03
+- Updated supabase-js from 2.45.4 to 2.118.0, loaded as the exact file with a subresource-integrity hash so a tampered CDN copy is refused.
+
 ## 1.4.1 — 2026-11-01
 - Now-playing line reads “Track name by Artist name” (Mixcloud style), without BPM/key/label. Those stay in the tracklist.
 
