@@ -1,6 +1,11 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.5.0 — 2026-11-03
+- Light and Dark appearance that follows the system by default (Auto), with an Auto / Light / Dark switch in the header. On a Mac or iPhone set to switch at sunset, the site changes with it.
+- Optional “Warm” night tint (a Night-Shift-style filter) for devices without Night Shift. It is off by default and does not replace Night Shift: the system's own warm shift still applies on top.
+- Colour tokens, theme-color (browser bar), form controls and scrollbars follow the scheme; higher-contrast preference respected; EQ display now sharp on Retina screens.
+
 ## 1.4.2 — 2026-11-03
 - Updated supabase-js from 2.45.4 to 2.118.0, loaded as the exact file with a subresource-integrity hash so a tampered CDN copy is refused.
 

@@ -6,7 +6,35 @@
 <title>TRIBER — DJ mixes</title>
 <meta name="description" content="True Rhythm Ignites Bodies, Energy Rising. Stream and download DJ mixes from DJ Eddie Ed.">
 <meta name="theme-color" content="#150b1a">
-<meta name="app-version" content="1.4.2">
+<meta name="color-scheme" content="dark light">
+<script>
+/* Appearance: follows the system (Auto), or Light / Dark. Warm tint is an optional Night-Shift-style filter. Runs before paint to avoid a flash. */
+(function () {
+  var P = 'triber_', r = document.documentElement, mq = matchMedia('(prefers-color-scheme: light)');
+  function get(k) { try { return localStorage.getItem(P + k); } catch (e) { return null; } }
+  function set(k, v) { try { localStorage.setItem(P + k, v); } catch (e) {} }
+  function resolved() { var t = get('theme'); return t === 'light' || t === 'dark' ? t : (mq.matches ? 'light' : 'dark'); }
+  function apply() {
+    var t = get('theme'); if (t === 'light' || t === 'dark') r.setAttribute('data-theme', t); else r.removeAttribute('data-theme');
+    if (get('warm') === 'on') r.setAttribute('data-warm', ''); else r.removeAttribute('data-warm');
+    var c = resolved() === 'light' ? '#faf6f2' : '#150b1a', m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', c);
+    var lbl = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+    document.querySelectorAll('[data-theme-btn]').forEach(function (b) { b.setAttribute('aria-label', 'Appearance: ' + lbl[t === 'light' || t === 'dark' ? t : 'auto'] + '. Activate to change.'); });
+    document.querySelectorAll('[data-warm-btn]').forEach(function (b) { b.setAttribute('aria-checked', get('warm') === 'on' ? 'true' : 'false'); });
+  }
+  apply();
+  mq.addEventListener && mq.addEventListener('change', apply);
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-theme-btn],[data-warm-btn]'); if (!b) return;
+    if (b.hasAttribute('data-theme-btn')) { var t = get('theme'); set('theme', t === 'light' ? 'dark' : t === 'dark' ? 'auto' : 'light'); }
+    else set('warm', get('warm') === 'on' ? 'off' : 'on');
+    apply();
+  });
+  document.addEventListener('DOMContentLoaded', function () { apply(); new MutationObserver(function () { apply(); }).observe(document.body, { childList: true, subtree: true }); });
+})();
+</script>
+
+<meta name="app-version" content="1.5.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -15,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.4.2"></script>
+<script src="config.js?v=1.5.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -25,9 +53,8 @@
   --serif:'Fraunces',Georgia,serif; --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 *{box-sizing:border-box}
-html{color-scheme:dark}
 body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;
-  background-image:radial-gradient(1100px 520px at 50% -8%,#2a1433 0,transparent 70%)}
+  background-image:radial-gradient(1100px 520px at 50% -8%,var(--glow) 0,transparent 70%)}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:inherit}
@@ -36,7 +63,7 @@ a{color:inherit}
 
 /* ---------- header ---------- */
 .top{display:flex;align-items:center;gap:18px;padding:14px max(20px,env(safe-area-inset-right)) 14px max(20px,env(safe-area-inset-left));
-  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:rgba(21,11,26,.88);backdrop-filter:blur(8px)}
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand img{height:38px;width:auto;display:block}
 .brand b{font:900 24px/1 var(--sans);letter-spacing:.04em}
@@ -45,7 +72,7 @@ a{color:inherit}
 .search:focus-within{border-color:var(--accent)}
 .search svg{flex:none;opacity:.6}
 
-#banner{display:none;margin:12px 20px 0;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:#2a1433;color:#e8c58c;font-size:13px}
+#banner{display:none;margin:12px 20px 0;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:var(--banner-bg);color:var(--banner-fg);font-size:13px}
 
 /* ---------- stage ---------- */
 main{max-width:1180px;margin:0 auto;padding:0 20px 40px}
@@ -85,9 +112,9 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 
 .transport{display:flex;align-items:center;gap:6px;margin:14px 0 6px}
 .ib{background:none;border:0;padding:10px;border-radius:50%;display:grid;place-items:center;color:var(--text);position:relative}
-.ib:hover{background:rgba(255,255,255,.06)}
+.ib:hover{background:var(--hover)}
 .ib small{position:absolute;font-size:8px;font-weight:800;top:50%;left:50%;transform:translate(-50%,-44%);pointer-events:none}
-.pp{width:58px;height:58px;border-radius:50%;border:0;background:var(--text);color:#150b1a;display:grid;place-items:center;margin:0 8px}
+.pp{width:58px;height:58px;border-radius:50%;border:0;background:var(--text);color:var(--bg);display:grid;place-items:center;margin:0 8px}
 .pp:hover{transform:scale(1.04)}
 .actions{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
 .act{background:none;border:0;display:inline-flex;align-items:center;gap:7px;padding:6px 0;color:var(--text);font-size:14px;text-decoration:none}
@@ -125,7 +152,7 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
 .chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font-size:13px;white-space:nowrap}
 .chip small{color:var(--muted);margin-left:5px}
-.chip[aria-pressed=true]{background:var(--text);color:#150b1a;font-weight:700}
+.chip[aria-pressed=true]{background:var(--text);color:var(--bg);font-weight:700}
 .chip[aria-pressed=true] small{color:#5b4562}
 .chip.more{border-style:dashed;color:var(--muted)}
 .allg{display:none;flex-wrap:wrap;gap:8px;margin-top:10px;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
@@ -139,9 +166,9 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 .card[aria-current=true]{box-shadow:0 0 0 2px var(--c)}
 .cover{aspect-ratio:1/1;position:relative;overflow:hidden;background:linear-gradient(135deg,var(--c),var(--c2))}
 .cover::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 50%,rgba(0,0,0,.16) 0 2px,transparent 2px 7px);mix-blend-mode:multiply}
-.cover::after{content:"";position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:#150b1a;box-shadow:0 0 0 5px rgba(21,11,26,.35)}
+.cover::after{content:"";position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:var(--bg);box-shadow:0 0 0 5px rgba(21,11,26,.35)}
 .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.cover .play{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;background:var(--text);color:#150b1a;display:grid;place-items:center;z-index:2;opacity:0;transform:translateY(6px);transition:.18s}
+.cover .play{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;background:var(--text);color:var(--bg);display:grid;place-items:center;z-index:2;opacity:0;transform:translateY(6px);transition:.18s}
 .card:hover .play,.card[aria-current=true] .play,.card:focus-visible .play{opacity:1;transform:none}
 .meta{padding:12px 14px 14px;display:grid;gap:2px}
 .meta strong{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -153,7 +180,7 @@ footer{border-top:1px solid var(--line);padding:26px 20px 34px;display:flex;gap:
 footer img{height:30px}
 footer b{color:var(--text);letter-spacing:.14em}
 
-#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--text);color:#150b1a;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.22s;z-index:60;max-width:90vw}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.22s;z-index:60;max-width:90vw}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- intro ---------- */
@@ -222,18 +249,33 @@ footer b{color:var(--text);letter-spacing:.14em}
   .brand b{font-size:21px}
 }
 
+
+/* ---- appearance: dark (default), light, auto; warm night tint ---- */
+:root{color-scheme:dark light;--ink:#150b1a;--glow:#2a1433;--hover:rgba(255,255,255,.06);--banner-bg:#2a1433;--banner-fg:#e8c58c;--cv:#120918;--grid:rgba(255,255,255,.07);--gridtxt:rgba(255,255,255,.3);--eqp-a:#2a1631;--eqp-b:#1c0f21}
+@media (prefers-color-scheme:light){:root:not([data-theme]){color-scheme:light;--bg:#faf6f2;--panel:#f2eae6;--card:#fff;--line:#e0d3d8;--text:#2a1630;--muted:#6a5570;--amber:#b3600a;--pink:#c0245c;--lav:#7a3aa6;--teal:#2c7763;--blue:#2d6aad;--bad:#b3261e;--glow:#f1e3f4;--hover:rgba(42,22,48,.07);--banner-bg:#fdf0d8;--banner-fg:#7a4a06;--cv:#fff;--grid:rgba(42,22,48,.09);--gridtxt:rgba(42,22,48,.5);--eqp-a:#fff;--eqp-b:#f6eef0}}
+:root[data-theme=light]{color-scheme:light;--bg:#faf6f2;--panel:#f2eae6;--card:#fff;--line:#e0d3d8;--text:#2a1630;--muted:#6a5570;--amber:#b3600a;--pink:#c0245c;--lav:#7a3aa6;--teal:#2c7763;--blue:#2d6aad;--bad:#b3261e;--glow:#f1e3f4;--hover:rgba(42,22,48,.07);--banner-bg:#fdf0d8;--banner-fg:#7a4a06;--cv:#fff;--grid:rgba(42,22,48,.09);--gridtxt:rgba(42,22,48,.5);--eqp-a:#fff;--eqp-b:#f6eef0}
+:root[data-theme=dark]{color-scheme:dark}
+@media (prefers-contrast:more){:root{--muted:#d8c3d2;--line:#6a4a75}:root[data-theme=light]{--muted:#3d2a43;--line:#8a7590}}
+@media (prefers-color-scheme:light) and (prefers-contrast:more){:root:not([data-theme]){--muted:#3d2a43;--line:#8a7590}}
+.tgrp{display:flex;gap:6px;flex:none}@media(max-width:700px){.tgrp .tbtn span:last-child{display:none}.tgrp .tbtn span:not(:last-child){display:none}.tbtn{padding:8px}}
+.tbtn{display:inline-flex;align-items:center;gap:6px;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:99px;padding:6px 11px;font:600 12px/1 var(--sans);cursor:pointer}
+.tbtn:hover{border-color:var(--accent,var(--amber))}.tbtn .tl,.tbtn .td{display:none}
+html[data-theme=light] .tbtn .ta,html[data-theme=dark] .tbtn .ta{display:none}html[data-theme=light] .tbtn .tl{display:inline}html[data-theme=dark] .tbtn .td{display:inline}
+.tbtn[aria-checked=true]{background:#f2a65a;border-color:#f2a65a;color:#2a1630}
+html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2147483000;background:rgba(255,150,50,.16);mix-blend-mode:multiply}
+@media print{html[data-warm]::after{display:none}}
 .eqbtn[aria-pressed=true]{color:var(--amber)}
-.eqp{margin-top:10px;background:linear-gradient(180deg,#2a1631,#1c0f21);border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.eqp{margin-top:10px;background:linear-gradient(180deg,var(--eqp-a),var(--eqp-b));border:1px solid var(--line);border-radius:12px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
 .eqp[hidden]{display:none}
 .eq-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .eq-top h3{font:600 12px/1 var(--sans,Inter,system-ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 auto 0 0}
 .eqp .seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
 .eqp .seg button{background:none;border:0;color:var(--muted);padding:5px 9px;font-size:12px;font-weight:600;cursor:pointer}
 .eqp .seg button[aria-checked=true]{background:var(--accent);color:#150b1a}
-.eqp select{background:#150b1a;color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 6px;font-size:12px}
-.eqp .pw{border:1px solid var(--line);background:#150b1a;color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer}
+.eqp select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 6px;font-size:12px}
+.eqp .pw{border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer}
 .eqp .pw[aria-pressed=true]{color:#150b1a;background:var(--teal);border-color:var(--teal)}
-.eqp canvas{display:block;width:100%;height:84px;background:#120918;border-radius:8px;border:1px solid var(--line)}
+.eqp canvas{display:block;width:100%;height:84px;background:var(--cv);border-radius:8px;border:1px solid var(--line)}
 .eq-faders{display:flex;justify-content:space-between;gap:2px;margin-top:10px}
 .fd{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;touch-action:none;user-select:none}
 .fd .db{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--muted);height:10px}
@@ -255,7 +297,7 @@ footer b{color:var(--text);letter-spacing:.14em}
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.4.2"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.5.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -266,6 +308,7 @@ footer b{color:var(--text);letter-spacing:.14em}
     <span class="sr">Search mixes</span>
     <input id="q" type="search" placeholder="Search mixes or tracks" autocomplete="off">
   </label>
+  <span class="tgrp"><button class="tbtn" data-theme-btn type="button" title="Appearance: Auto / Light / Dark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span class="ta">Auto</span><span class="tl">Light</span><span class="td">Dark</span></button><button class="tbtn" data-warm-btn type="button" role="switch" aria-checked="false" title="Warm night tint: softens blue light, like Night Shift"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span>Warm</span></button></span>
 </header>
 <div id="banner"></div>
 
@@ -930,13 +973,16 @@ function eqSetGain(i, v, silent) {
 }
 function eqDraw() {
   const cv = $('#eqCv'); if (!cv || $('#eq').hidden) return;
-  const c = cv.getContext('2d'), W = cv.width, H = cv.height;
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 300, H = cv.clientHeight || 84;
+  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0);
   c.clearRect(0, 0, W, H);
   const xOf = f => (Math.log10(f) - Math.log10(20)) / (Math.log10(20000) - Math.log10(20)) * W;
   const yOf = db => H / 2 - (db / 15) * (H / 2);
-  c.strokeStyle = 'rgba(255,255,255,.07)'; c.lineWidth = 1; c.fillStyle = 'rgba(255,255,255,.28)'; c.font = '16px ui-monospace,Menlo,monospace';
-  [50, 100, 200, 500, 1000, 2000, 5000, 10000].forEach(f => { const x = xOf(f); c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); c.fillText(f >= 1000 ? f / 1000 + 'k' : f, x + 3, H - 5); });
-  [-12, -6, 0, 6, 12].forEach(d => { c.strokeStyle = d === 0 ? 'rgba(255,255,255,.22)' : 'rgba(255,255,255,.07)'; c.beginPath(); c.moveTo(0, yOf(d)); c.lineTo(W, yOf(d)); c.stroke(); });
+  const cs = getComputedStyle(document.documentElement), gridC = cs.getPropertyValue('--grid').trim() || 'rgba(255,255,255,.07)', txtC = cs.getPropertyValue('--gridtxt').trim() || 'rgba(255,255,255,.3)', dotC = cs.getPropertyValue('--text').trim() || '#f3e9e6', offC = cs.getPropertyValue('--muted').trim() || '#a8899f';
+  c.strokeStyle = gridC; c.lineWidth = 1; c.fillStyle = txtC; c.font = '10px ui-monospace,Menlo,monospace';
+  [50, 100, 200, 500, 1000, 2000, 5000, 10000].forEach(f => { const x = xOf(f); c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); c.fillText(f >= 1000 ? f / 1000 + 'k' : f, x + 3, H - 4); });
+  [-12, -6, 0, 6, 12].forEach(d => { c.strokeStyle = gridC; c.lineWidth = d === 0 ? 2 : 1; c.beginPath(); c.moveTo(0, yOf(d)); c.lineTo(W, yOf(d)); c.stroke(); });
   const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e8a34c';
   if (EQ.built && EQ.an && !audio.paused) {
     EQ.an.getByteFrequencyData(EQ.buf);
@@ -955,8 +1001,8 @@ function eqDraw() {
   for (let k = 0; k < N; k++) fr[k] = 20 * Math.pow(1000, k / (N - 1));
   if (nodes) nodes.forEach((nd, i) => { const saved = nd.gain.value; nd.gain.value = g[i]; nd.getFrequencyResponse(fr, mag, ph); nd.gain.value = saved; for (let k = 0; k < N; k++) tot[k] *= mag[k]; });
   c.beginPath(); for (let k = 0; k < N; k++) { const db = 20 * Math.log10(tot[k]), x = xOf(fr[k]), y = yOf(Math.max(-15, Math.min(15, db))); k ? c.lineTo(x, y) : c.moveTo(x, y); }
-  c.lineWidth = 3; c.strokeStyle = EQS.on ? '#7fb7a3' : 'rgba(168,137,159,.7)'; c.stroke();
-  bands.forEach((b, i) => { c.fillStyle = EQS.on ? '#f3e9e6' : '#a8899f'; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 5, 0, 7); c.fill(); });
+  c.lineWidth = 2; c.strokeStyle = EQS.on ? cs.getPropertyValue('--teal').trim() || '#7fb7a3' : offC; c.stroke();
+  bands.forEach((b, i) => { c.fillStyle = EQS.on ? dotC : offC; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 3.5, 0, 7); c.fill(); });
 }
 function eqLoop() { cancelAnimationFrame(EQ.raf); if ($('#eq').hidden) return; eqDraw(); if (EQ.built && !audio.paused) EQ.raf = requestAnimationFrame(eqLoop); }
 function eqInit() {
