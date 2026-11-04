@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.5.2 — 2026-11-03
+- Tracklist rows read “Track name by Artist name”, matching the now-playing line.
+
 ## 1.5.1 — 2026-11-03
 - New purple and grey palette in both modes. Light: Orchid Purple #8A3FFC, Muted Amethyst #A76FE6, Charcoal #262626, Neutral Grey #6F6F6F, off-white #F4F4F6. Dark: Electric Violet #A78BFA, Neon Lavender #C084FC, Onyx #121214, Dark Slate #222226, Soft Silver #F3F4F6, Steel Grey #9CA3AF.
 - Button text picks black or white automatically for contrast on any genre colour; genre-coloured text is darkened in light mode.

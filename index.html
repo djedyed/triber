@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.5.1">
+<meta name="app-version" content="1.5.2">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.5.1"></script>
+<script src="config.js?v=1.5.2"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -297,7 +297,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.5.1"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.5.2"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -832,7 +832,7 @@ const trackMeta = t => [t.bpm ? t.bpm + ' BPM' : '', t.musical_key || '', t.labe
 function renderTracklist() {
   const ol = $('#tl');
   if (!S.tracks.length) { ol.innerHTML = `<li class="empty">No tracklist for this mix yet.</li>`; return; }
-  ol.innerHTML = S.tracks.map((t, i) => `<li><button type="button" data-t="${t.start_sec}"><time>${mmss(t.start_sec)}</time><span>${esc(t.title)}${t.artist ? ` <em>· ${esc(t.artist)}</em>` : ''}${trackMeta(t) ? `<small class="tm">${esc(trackMeta(t))}</small>` : ''}</span></button></li>`).join('');
+  ol.innerHTML = S.tracks.map((t, i) => `<li><button type="button" data-t="${t.start_sec}"><time>${mmss(t.start_sec)}</time><span>${esc(t.title)}${t.artist ? ` by <em>${esc(t.artist)}</em>` : ''}${trackMeta(t) ? `<small class="tm">${esc(trackMeta(t))}</small>` : ''}</span></button></li>`).join('');
 }
 function renderComments() {
   const ul = $('#clist');
