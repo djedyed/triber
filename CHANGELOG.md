@@ -1,6 +1,11 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.6.0 — 2026-11-05
+- Gramophone skin redrawn from a real brass-horn machine: scalloped brass bell, curved neck, nickel tone arm that tracks the record, mahogany cabinet with turned posts, crank.
+- New Master control in Your sound: Normalize, Loud, Max (compressor, makeup gain, limiter and soft clip) with a gain-reduction readout.
+- Tracklist rows size to their content and wrap long artist and title text instead of cutting it off.
+
 ## 1.5.2 — 2026-11-03
 - Tracklist rows read “Track name by Artist name”, matching the now-playing line.
 

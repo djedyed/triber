@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.5.2">
+<meta name="app-version" content="1.6.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.5.2"></script>
+<script src="config.js?v=1.6.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -127,7 +127,7 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 .social{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:8px 0 30px;border-top:1px solid var(--line);padding-top:26px}
 .social h2{font:800 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
 .tl{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto}
-.tl li button{display:grid;grid-template-columns:54px 1fr;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:8px 10px;align-items:baseline}
+.tl li button{display:grid;grid-template-columns:max-content minmax(0,1fr);overflow-wrap:anywhere;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:8px 10px;align-items:baseline}
 .tl li button:hover{background:var(--card)}
 .tl li.cur button{background:var(--card);box-shadow:inset 3px 0 0 var(--accent)}
 .tl time{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
@@ -273,6 +273,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 .eqp .seg button{background:none;border:0;color:var(--muted);padding:5px 9px;font-size:12px;font-weight:600;cursor:pointer}
 .eqp .seg button[aria-checked=true]{background:var(--accent);color:var(--onaccent,var(--onamber))}
 .eqp select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 6px;font-size:12px}
+.mst{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.mst h3{margin:0;font-size:13px}.mst .gr{font:11px ui-monospace,Menlo,monospace;color:var(--muted);min-width:70px}
 .eqp .pw{border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer}
 .eqp .pw[aria-pressed=true]{color:var(--onamber);background:var(--teal);border-color:var(--teal)}
 .eqp canvas{display:block;width:100%;height:84px;background:var(--cv);border-radius:8px;border:1px solid var(--line)}
@@ -297,7 +298,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.5.2"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.6.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -355,7 +356,8 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
         </div>
         <canvas id="eqCv" width="560" height="168" aria-label="Equaliser response and live spectrum"></canvas>
         <div class="eq-faders" id="eqFaders"></div>
-        <p class="eq-note" id="eqNote">Tune the mix to your ears or your speakers. Your setting is saved on this device.</p>
+        <div class="mst" id="mst"><h3>Master</h3><div class="seg" id="mstSeg" role="radiogroup" aria-label="Loudness master"><button role="radio" data-m="off">Off</button><button role="radio" data-m="normalize" title="Evens out quiet and dynamic mixes">Normalize</button><button role="radio" data-m="loud" title="Louder, tighter, club level">Loud</button><button role="radio" data-m="max" title="Loudest. Trades dynamics for level">Max</button></div><span class="gr" id="mstGr" aria-live="off"></span></div>
+        <p class="eq-note" id="eqNote">Tune the mix to your ears or your speakers. Master evens out the level: Normalize for quiet or dynamic mixes, Loud for club level, Max for the loudest. Your setting is saved on this device.</p>
       </div>
     </div>
   </section>
@@ -641,32 +643,45 @@ function reelFrame(p, playing, dt, rm) {
 }
 
 function gramHTML() {
-  const petals = Array.from({ length: 9 }, (_, i) => { const a = i * 40 * Math.PI / 180; return `<circle cx="${(Math.cos(a) * 70).toFixed(1)}" cy="${(Math.sin(a) * 66).toFixed(1)}" r="30" fill="url(#gw)" stroke="#8a6a38" stroke-width="1.5"/>`; }).join('');
-  const rings = [64, 52, 40, 29, 19].map((r, i) => `<ellipse rx="${r * 1.12}" ry="${r}" fill="${i % 2 ? '#d9bd86' : '#b99357'}" stroke="#7a5a2e" stroke-width="1"/>`).join('');
-  const arches = [0, 1, 2].map(i => `<path d="M${80 + i * 38} 352V310Q${80 + i * 38} 292 ${97 + i * 38} 292T${114 + i * 38} 310V352Z" fill="#c4a066" stroke="#7a5a2e" stroke-width="1.5"/><path d="M${88 + i * 38} 346V312Q${88 + i * 38} 300 ${97 + i * 38} 300T${106 + i * 38} 312V346Z" fill="#9c7840" opacity=".6"/>`).join('');
-  const spokes = [0, 60, 120, 180, 240, 300].map(a => `<rect x="-2.5" y="-26" width="5" height="22" rx="2" fill="#7a5a2e" transform="rotate(${a})"/>`).join('');
-  return `<svg class="sk" viewBox="0 0 400 400" role="img" aria-label="Wooden gramophone playing"><defs>${wood('gw')}
-  <radialGradient id="grec" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2a2a30"/><stop offset=".6" stop-color="#101012"/><stop offset="1" stop-color="#26262b"/></radialGradient></defs>
-  <polygon points="195,72 352,226 338,262 100,150" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2"/>
-  ${[0.25, 0.45, 0.65, 0.85].map(t => { const x1 = 195 + (352 - 195) * t, y1 = 72 + (226 - 72) * t, x2 = 100 + (338 - 100) * t, y2 = 150 + (262 - 150) * t; return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="#8a6a38" stroke-width="2" opacity=".7"/>`; }).join('')}
-  <g transform="translate(140 108) rotate(-30)"><g transform="scale(1 .86)">${petals}<ellipse rx="86" ry="78" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2"/>${rings}</g></g>
-  <circle cx="338" cy="252" r="20" fill="#b99357" stroke="#7a5a2e" stroke-width="2"/><rect x="326" y="256" width="26" height="20" fill="#c4a066" stroke="#7a5a2e"/>
-  <polygon points="48,274 352,274 340,256 62,256" fill="#e6cf9c" stroke="#7a5a2e" stroke-width="2"/>
-  <rect x="48" y="274" width="304" height="94" rx="8" fill="url(#gw)" stroke="#7a5a2e" stroke-width="2.5"/>
-  ${arches}
-  <circle cx="268" cy="322" r="36" fill="#b99357" stroke="#7a5a2e" stroke-width="2.5"/><circle cx="268" cy="322" r="28" fill="#e3c88f" stroke="#7a5a2e"/><g transform="translate(268 322)"><g id="gcog" style="transform-origin:0 0">${spokes}<circle r="8" fill="#7a5a2e"/></g></g>
-  <g transform="translate(352 322)"><g id="gcrank" style="transform-origin:0 0"><path d="M0 0L22 0" stroke="#8a6a38" stroke-width="5" stroke-linecap="round"/><circle cx="22" cy="0" r="6" fill="#c9a24a" stroke="#6f5320"/></g></g>
-  ${[70, 195, 330].map(x => `<path d="M${x - 14} 368H${x + 14}L${x + 8} 386H${x - 8}Z" fill="#9c7840" stroke="#7a5a2e"/>`).join('')}
-  <g transform="translate(170 262) scale(1 .24)"><circle r="112" fill="#17120d"/><g id="grec" style="transform-origin:0 0"><circle r="106" fill="url(#grec)"/>${[96, 84, 70, 58].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>`).join('')}<path d="M-100 0A100 100 0 0 1 0 -100" stroke="rgba(255,255,255,.16)" stroke-width="10" fill="none"/><path d="M100 0A100 100 0 0 1 0 100" stroke="rgba(255,255,255,.16)" stroke-width="10" fill="none"/><circle r="34" style="fill:var(--accent)"/><circle r="4" fill="#0b0b0d"/></g></g>
-  <g id="garm"><line id="gal" x1="340" y1="250" x2="270" y2="268" stroke="#c9a24a" stroke-width="5" stroke-linecap="round"/><circle cx="340" cy="250" r="9" fill="#d8b45a" stroke="#6f5320" stroke-width="1.5"/><rect id="gah" x="262" y="263" width="18" height="8" rx="2" fill="#b0893a" stroke="#6f5320" transform="rotate(10 270 268)"/></g></svg>`;
+  const pet = Array.from({ length: 12 }, (_, i) => { const t = i / 12 * Math.PI * 2, x = Math.cos(t) * 50, y = Math.sin(t) * 82; return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(15 + 3 * Math.abs(Math.sin(t))).toFixed(1)}" fill="url(#gbr)" stroke="#6b4c12" stroke-width="1.2"/>`; }).join('');
+  const grain = [0, 1, 2, 3, 4, 5, 6].map(i => `<path d="M${62 + i * 6} ${304 + i * 8}q60 -6 120 0t120 -2" stroke="#1d0b07" stroke-width="1" fill="none" opacity=".35"/>`).join('');
+  const post = x => `<g><rect x="${x - 7}" y="300" width="14" height="62" rx="4" fill="url(#gmh)" stroke="#220e08"/><ellipse cx="${x}" cy="312" rx="9" ry="5" fill="#4a2217" stroke="#220e08"/><ellipse cx="${x}" cy="338" rx="8" ry="4.5" fill="#4a2217" stroke="#220e08"/><ellipse cx="${x}" cy="354" rx="9" ry="5" fill="#4a2217" stroke="#220e08"/></g>`;
+  return `<svg class="sk" viewBox="0 0 400 400" role="img" aria-label="Brass-horn gramophone playing"><defs>
+  <linearGradient id="gbr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c5a16"/><stop offset=".28" stop-color="#e9c768"/><stop offset=".5" stop-color="#b98a2a"/><stop offset=".72" stop-color="#f4e0a0"/><stop offset="1" stop-color="#7a5612"/></linearGradient>
+  <linearGradient id="gbh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6e3a4"/><stop offset=".22" stop-color="#d7ac48"/><stop offset=".55" stop-color="#a77a22"/><stop offset=".8" stop-color="#e2bf62"/><stop offset="1" stop-color="#6e4d10"/></linearGradient>
+  <radialGradient id="gin" cx=".62" cy=".5" r=".7"><stop offset="0" stop-color="#2a1a06"/><stop offset=".55" stop-color="#7d5a17"/><stop offset="1" stop-color="#d4a843"/></radialGradient>
+  <linearGradient id="gmh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a3a28"/><stop offset=".5" stop-color="#4a2016"/><stop offset="1" stop-color="#2f130c"/></linearGradient>
+  <linearGradient id="gmt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a4630"/><stop offset="1" stop-color="#5a2819"/></linearGradient>
+  <linearGradient id="gni" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d949b"/><stop offset=".4" stop-color="#f1f3f4"/><stop offset="1" stop-color="#7c838a"/></linearGradient>
+  <radialGradient id="grec" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#2a2a30"/><stop offset=".6" stop-color="#0d0d10"/><stop offset="1" stop-color="#24242a"/></radialGradient></defs>
+  <ellipse cx="200" cy="392" rx="170" ry="8" fill="rgba(0,0,0,.28)"/>
+  <path d="M42 366H358L350 384H50Z" fill="url(#gmh)" stroke="#220e08" stroke-width="2"/>
+  <rect x="56" y="296" width="288" height="72" rx="3" fill="url(#gmh)" stroke="#220e08" stroke-width="2.5"/>${grain}
+  <rect x="82" y="308" width="236" height="46" rx="2" fill="none" stroke="#1d0b07" stroke-width="2"/><rect x="90" y="315" width="220" height="32" rx="1" fill="url(#gmt)" opacity=".55" stroke="#1d0b07"/>
+  ${post(66)}${post(334)}
+  <path d="M70 296L92 266H308L330 296Z" fill="url(#gmt)" stroke="#220e08" stroke-width="2.5"/>
+  <path d="M56 296H344" stroke="#b96a4a" stroke-width="2" opacity=".6"/>
+  <ellipse cx="196" cy="283" rx="122" ry="26" fill="#1b0c08" stroke="#2a110a"/>
+  <g transform="translate(196 283) scale(1 .21)"><circle r="118" fill="#d4d6d9" stroke="#8d949b" stroke-width="3"/><g id="grec" style="transform-origin:0 0"><circle r="112" fill="url(#grec)"/>${[104, 94, 84, 72, 60, 50].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="2"/>`).join('')}<path d="M-104 0A104 104 0 0 1 0 -104" stroke="rgba(255,255,255,.2)" stroke-width="12" fill="none"/><path d="M104 0A104 104 0 0 1 0 104" stroke="rgba(255,255,255,.16)" stroke-width="12" fill="none"/><circle r="38" style="fill:var(--accent)"/><circle r="38" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/><circle r="5" fill="#cfd3d6"/></g></g>
+  <g transform="translate(350 332)"><g id="gcrank" style="transform-origin:0 0"><rect x="-4" y="-3" width="8" height="8" fill="url(#gni)"/><path d="M0 0L26 0" stroke="url(#gni)" stroke-width="6" stroke-linecap="round"/><circle cx="26" cy="0" r="7" fill="url(#gbr)" stroke="#6b4c12"/></g></g>
+  <circle cx="350" cy="332" r="6" fill="url(#gbr)" stroke="#6b4c12"/>
+  <path d="M96 24C176 36 232 128 250 196L268 232C216 232 160 222 98 190Z" fill="url(#gbh)" stroke="#6b4c12" stroke-width="2"/>
+  <path d="M110 40C176 56 220 132 240 192" stroke="rgba(255,248,214,.85)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M104 150C170 176 214 196 252 214" stroke="rgba(70,44,6,.45)" stroke-width="3" fill="none"/><path d="M104 108C160 130 206 160 246 196" stroke="rgba(255,240,190,.4)" stroke-width="2" fill="none"/>
+  <g transform="translate(104 108) rotate(-14)">${pet}<ellipse rx="52" ry="84" fill="url(#gbh)" stroke="#6b4c12" stroke-width="2.5"/><ellipse rx="40" ry="72" fill="url(#gin)" stroke="#5a3d0c" stroke-width="2"/><ellipse rx="26" ry="50" fill="none" stroke="rgba(255,225,150,.25)" stroke-width="3"/><path d="M-38 -34A44 74 0 0 1 -10 -68" stroke="rgba(255,244,205,.75)" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <rect x="244" y="190" width="30" height="46" rx="6" transform="rotate(-8 258 213)" fill="url(#gbr)" stroke="#6b4c12" stroke-width="2"/>
+  <circle cx="268" cy="240" r="15" fill="url(#gbr)" stroke="#6b4c12" stroke-width="2"/><circle cx="268" cy="240" r="7" fill="url(#gni)" stroke="#6a7279"/>
+  <rect x="262" y="250" width="12" height="36" fill="url(#gni)" stroke="#6a7279"/>
+  <g id="garm"><line id="galo" x1="268" y1="240" x2="240" y2="272" stroke="#4d545a" stroke-width="8" stroke-linecap="round"/><line id="gal" x1="268" y1="240" x2="240" y2="272" stroke="url(#gni)" stroke-width="5.5" stroke-linecap="round"/><g id="gah"><circle r="11" fill="url(#gbr)" stroke="#6b4c12" stroke-width="2"/><circle r="5" fill="#2a2a30"/></g></g></svg>`;
 }
 function gramFrame(p, playing, dt, rm) {
   if (!document.getElementById('grec')) return;
-  if (playing && !rm) { spin('grec', 200 * dt); spin('gcog', 90 * dt); spin('gcrank', 90 * dt); }
-  const target = playing ? 98 - 52 * p : 150;
+  if (playing && !rm) { spin('grec', 200 * dt); spin('gcrank', 120 * dt); }
+  const target = playing ? 276 - 62 * p : 318;
   SK.arm = SK.arm === null ? target : SK.arm + (target - SK.arm) * Math.min(1, dt * 3.2);
-  const nx = 170 + SK.arm * 0.98, ny = 262 + SK.arm * 0.24 * 0.35 + 6;
-  setA('gal', 'x2', nx.toFixed(1)); setA('gal', 'y2', ny.toFixed(1)); setA('gah', 'x', (nx - 8).toFixed(1)); setA('gah', 'y', (ny - 5).toFixed(1)); setA('gah', 'transform', `rotate(10 ${nx} ${ny})`);
+  const nx = SK.arm, ny = 262 + Math.max(0, 318 - nx) * 0.1 + (nx > 300 ? -(nx - 300) * 1.2 : 0);
+  ['gal', 'galo'].forEach(i => { setA(i, 'x2', nx.toFixed(1)); setA(i, 'y2', ny.toFixed(1)); });
+  setA('gah', 'transform', `translate(${nx.toFixed(1)} ${ny.toFixed(1)})`);
 }
 
 function eightHTML() {
@@ -902,9 +917,11 @@ const EQ_PRESETS = {
   'Loudness': [[6, -2, 5], [6, 3, 0, -2, -1, 3, 5]],
   'Small speaker': [[-6, 3, 2], [-8, -5, 2, 4, 4, 2, 0]]
 };
+const MASTER = { normalize: { th: -24, ra: 2.5, kn: 24, at: 0.012, re: 0.25, mk: 3 }, loud: { th: -30, ra: 4, kn: 18, at: 0.008, re: 0.2, mk: 7 }, max: { th: -36, ra: 6, kn: 12, at: 0.005, re: 0.15, mk: 10 } };
 const EQ = { ctx: null, src: null, pre: null, an: null, nodes: { 3: [], 7: [] }, built: false, probing: false, buf: null, raf: 0 };
-let EQS = { on: false, mode: 7, preset: 'Flat', g: { 3: [0, 0, 0], 7: [0, 0, 0, 0, 0, 0, 0] } };
+let EQS = { on: false, master: 'off', mode: 7, preset: 'Flat', g: { 3: [0, 0, 0], 7: [0, 0, 0, 0, 0, 0, 0] } };
 try { const raw = store.get('triber_eq'); if (raw) { const o = JSON.parse(raw); EQS = { ...EQS, ...o, g: { 3: (o.g?.[3] || EQS.g[3]).slice(0, 3), 7: (o.g?.[7] || EQS.g[7]).slice(0, 7) } }; } } catch {}
+if (!(EQS.master in { off: 1, ...MASTER })) EQS.master = 'off';
 window.__eq = { EQ, get S() { return EQS; } };
 function eqSave() { store.set('triber_eq', JSON.stringify(EQS)); }
 function eqCtx() {
@@ -914,6 +931,9 @@ function eqCtx() {
   EQ.pre = EQ.ctx.createGain();
   [3, 7].forEach(m => { EQ.nodes[m] = EQ_BANDS[m].map(b => { const n = EQ.ctx.createBiquadFilter(); n.type = b.t; n.frequency.value = b.f; n.Q.value = b.q; n.gain.value = 0; return n; }); });
   EQ.an = EQ.ctx.createAnalyser(); EQ.an.fftSize = 2048; EQ.an.smoothingTimeConstant = 0.82; EQ.buf = new Uint8Array(EQ.an.frequencyBinCount);
+  EQ.cmp = EQ.ctx.createDynamicsCompressor(); EQ.mk = EQ.ctx.createGain(); EQ.lim = EQ.ctx.createDynamicsCompressor(); EQ.sat = EQ.ctx.createWaveShaper();
+  EQ.lim.threshold.value = -2; EQ.lim.knee.value = 0; EQ.lim.ratio.value = 20; EQ.lim.attack.value = 0.002; EQ.lim.release.value = 0.08;
+  const cv = new Float32Array(4096); for (let i = 0; i < cv.length; i++) { const x = i / 2047.5 - 1, a = Math.abs(x); cv[i] = a < 0.9 ? x : Math.sign(x) * (0.9 + 0.1 * Math.tanh((a - 0.9) / 0.1)); } EQ.sat.curve = cv; EQ.sat.oversample = '4x';
   eqApply();
   return EQ.ctx;
 }
@@ -923,12 +943,14 @@ function eqApply() {
   [3, 7].forEach(m => EQ.nodes[m].forEach((n, i) => { n.gain.value = (m === EQS.mode && EQS.on) ? EQS.g[m][i] : 0; }));
   const maxPos = EQS.on ? Math.max(0, ...eqGains()) : 0;
   EQ.pre.gain.value = Math.pow(10, -maxPos / 20);
+  const M = MASTER[EQS.master]; if (M) { EQ.cmp.threshold.value = M.th; EQ.cmp.ratio.value = M.ra; EQ.cmp.knee.value = M.kn; EQ.cmp.attack.value = M.at; EQ.cmp.release.value = M.re; EQ.mk.gain.value = Math.pow(10, M.mk / 20); }
   if (EQ.built) eqWire();
 }
 function eqWire() {
-  try { EQ.src.disconnect(); EQ.pre.disconnect(); EQ.nodes[3].concat(EQ.nodes[7]).forEach(n => n.disconnect()); EQ.an.disconnect(); } catch {}
+  try { EQ.src.disconnect(); EQ.pre.disconnect(); EQ.nodes[3].concat(EQ.nodes[7]).forEach(n => n.disconnect()); EQ.cmp.disconnect(); EQ.mk.disconnect(); EQ.lim.disconnect(); EQ.sat.disconnect(); EQ.an.disconnect(); } catch {}
   let last = EQ.src;
   if (EQS.on) { last.connect(EQ.pre); last = EQ.pre; EQ.nodes[EQS.mode].forEach(n => { last.connect(n); last = n; }); }
+  if (EQS.master !== 'off') { last.connect(EQ.cmp); EQ.cmp.connect(EQ.mk); EQ.mk.connect(EQ.lim); EQ.lim.connect(EQ.sat); last = EQ.sat; }
   last.connect(EQ.an); EQ.an.connect(EQ.ctx.destination);
 }
 function eqProbeCors() {
@@ -961,6 +983,7 @@ function eqRenderFaders() {
   const bands = EQ_BANDS[EQS.mode], g = eqGains();
   $('#eqFaders').innerHTML = bands.map((b, i) => `<div class="fd"><span class="db" data-db="${i}">${fmtDb(g[i])}</span><div class="slot" role="slider" tabindex="0" data-i="${i}" aria-label="${b.l} Hz gain" aria-orientation="vertical" aria-valuemin="-12" aria-valuemax="12" aria-valuenow="${g[i]}" aria-valuetext="${fmtDb(g[i])} dB"><div class="cap" style="top:${(1 - (g[i] + 12) / 24) * 100}%"></div></div><span class="hz">${b.l}</span></div>`).join('');
   document.querySelectorAll('#eq .seg button').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.mode === EQS.mode)));
+  document.querySelectorAll('#mstSeg button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.m === EQS.master)));
   $('#eqPow').textContent = EQS.on ? 'ON' : 'OFF'; $('#eqPow').setAttribute('aria-pressed', String(EQS.on));
   $('#eq').classList.toggle('off', !EQS.on);
   $('#bEq').setAttribute('aria-pressed', String(EQS.on));
@@ -1006,7 +1029,7 @@ function eqDraw() {
   c.lineWidth = 2; c.strokeStyle = EQS.on ? cs.getPropertyValue('--teal').trim() || '#7fb7a3' : offC; c.stroke();
   bands.forEach((b, i) => { c.fillStyle = EQS.on ? dotC : offC; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 3.5, 0, 7); c.fill(); });
 }
-function eqLoop() { cancelAnimationFrame(EQ.raf); if ($('#eq').hidden) return; eqDraw(); if (EQ.built && !audio.paused) EQ.raf = requestAnimationFrame(eqLoop); }
+function eqLoop() { cancelAnimationFrame(EQ.raf); if ($('#eq').hidden) return; eqDraw(); const gr = $('#mstGr'); if (gr) gr.textContent = EQ.built && EQS.master !== 'off' && !audio.paused ? 'GR ' + EQ.cmp.reduction.toFixed(1) + ' dB' : ''; if (EQ.built && !audio.paused) EQ.raf = requestAnimationFrame(eqLoop); }
 function eqInit() {
   $('#eqPreset').innerHTML = Object.keys(EQ_PRESETS).concat('Custom').map(n => `<option>${n}</option>`).join('');
   $('#eqPreset').value = EQS.preset in EQ_PRESETS ? EQS.preset : 'Custom';
@@ -1022,6 +1045,9 @@ function eqInit() {
     if (EQS.on) { const ok = await eqEnable(); if (!ok) { EQS.on = false; eqSave(); } }
     eqApply(); eqRenderFaders(); eqLoop();
   });
+  $('#mstSeg').addEventListener('click', async e => { const b = e.target.closest('button'); if (!b) return; const prev = EQS.master; EQS.master = b.dataset.m; eqRenderFaders();
+    if (EQS.master !== 'off') { eqCtx(); const ok = await eqEnable(); if (!ok) EQS.master = 'off'; }
+    eqApply(); eqSave(); eqRenderFaders(); eqLoop(); });
   const box = $('#eqFaders'); let drag = null;
   const setFromY = (slot, y) => { const r = slot.getBoundingClientRect(); const t = Math.min(1, Math.max(0, (y - r.top) / r.height)); eqSetGain(+slot.dataset.i, (1 - t) * 24 - 12, true); };
   box.addEventListener('pointerdown', e => { const s = e.target.closest('.slot'); if (!s) return; drag = s; s.setPointerCapture(e.pointerId); s.focus(); setFromY(s, e.clientY); e.preventDefault(); });
@@ -1042,7 +1068,7 @@ function startPlayback() {
   const m = S.cur; if (!m) return;
   if (!m.audio_url) { toast('This mix has no audio attached yet.'); return; }
   const go = () => audio.play().catch(() => { S.playing = false; renderPlayState(); toast('Could not load this mix. Check your connection and try again.'); });
-  if (EQS.on && !EQ.built) { eqEnable().then(ok => { if (!ok) { EQS.on = false; eqSave(); eqRenderFaders(); } go(); }); return; }
+  if ((EQS.on || EQS.master !== 'off') && !EQ.built) { eqEnable().then(ok => { if (!ok) { EQS.on = false; EQS.master = 'off'; eqSave(); eqRenderFaders(); } go(); }); return; }
   go();
 }
 function togglePlay() { if (!S.cur) return; if (audio.paused) startPlayback(); else audio.pause(); }
