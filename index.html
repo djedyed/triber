@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.7.0">
+<meta name="app-version" content="1.7.1">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.7.0"></script>
+<script src="config.js?v=1.7.1"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -300,7 +300,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.7.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.7.1"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -818,7 +818,7 @@ function currentTrack() {
 }
 function renderNow() {
   const m = S.cur, i = currentTrack(), tr = S.tracks[i];
-  $('#nowLabel').textContent = S.playing ? 'Now playing' : 'Up next';
+  $('#nowLabel').textContent = S.playing ? 'Now playing' : (i >= 0 && (audio.currentTime || 0) > 0.5 ? 'Paused on' : 'Up next');
   if (!m) { $('#nowTxt').textContent = '—'; $('#nowIdx').textContent = ''; return; }
   if (tr) {
     $('#nowTxt').innerHTML = `<strong>${esc(tr.title)}</strong>${tr.artist ? ` by <em>${esc(tr.artist)}</em>` : ''}`;

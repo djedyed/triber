@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.7.1 — 2026-11-05
+- The now-playing strip says "Paused on" (not "Up next") when you pause mid-mix.
+
 ## 1.7.0 — 2026-11-05
 - Mix cover art: shows beside the title, as the record label on the Vinyl and Gramophone skins, on the CD, and as the lock-screen artwork.
 
