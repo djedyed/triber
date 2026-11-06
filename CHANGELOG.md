@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.7.0 — 2026-11-05
+- Mix cover art: shows beside the title, as the record label on the Vinyl and Gramophone skins, on the CD, and as the lock-screen artwork.
+
 ## 1.6.0 — 2026-11-05
 - Gramophone skin redrawn from a real brass-horn machine: scalloped brass bell, curved neck, nickel tone arm that tracks the record, mahogany cabinet with turned posts, crank.
 - New Master control in Your sound: Normalize, Loud, Max (compressor, makeup gain, limiter and soft clip) with a gain-reduction readout.

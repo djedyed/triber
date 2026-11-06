@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.6.0">
+<meta name="app-version" content="1.7.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.6.0"></script>
+<script src="config.js?v=1.7.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -126,6 +126,8 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 /* ---------- tracklist + comments ---------- */
 .social{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:8px 0 30px;border-top:1px solid var(--line);padding-top:26px}
 .social h2{font:800 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+.ttl{display:flex;gap:14px;align-items:center}.ttl>div{min-width:0}.mcov{width:84px;height:84px;flex:none;border-radius:14px;object-fit:cover;box-shadow:0 6px 18px rgba(0,0,0,.35);border:1px solid var(--line)}.mcov[hidden]{display:none}
+.cdl{position:absolute;inset:0;margin:auto;width:60%;height:60%;border-radius:50%;background-size:cover;background-position:center}
 .tl{list-style:none;margin:0;padding:0;max-height:340px;overflow:auto}
 .tl li button{display:grid;grid-template-columns:max-content minmax(0,1fr);overflow-wrap:anywhere;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:8px 10px;align-items:baseline}
 .tl li button:hover{background:var(--card)}
@@ -298,7 +300,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.6.0"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.7.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -321,8 +323,8 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
     </div>
     <div>
       <div class="eyebrow"><span class="dot"></span><span id="state">Paused</span></div>
-      <h1 id="mTitle">Loading mixes…</h1>
-      <p class="byline" id="mBy"></p>
+      <div class="ttl"><img id="mCover" class="mcov" alt="" hidden><div><h1 id="mTitle">Loading mixes…</h1>
+      <p class="byline" id="mBy"></p></div></div>
 
       <div class="now" id="now">
         <div class="eq" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -662,7 +664,7 @@ function gramHTML() {
   <path d="M70 296L92 266H308L330 296Z" fill="url(#gmt)" stroke="#220e08" stroke-width="2.5"/>
   <path d="M56 296H344" stroke="#b96a4a" stroke-width="2" opacity=".6"/>
   <ellipse cx="196" cy="283" rx="122" ry="26" fill="#1b0c08" stroke="#2a110a"/>
-  <g transform="translate(196 283) scale(1 .21)"><circle r="118" fill="#d4d6d9" stroke="#8d949b" stroke-width="3"/><g id="grec" style="transform-origin:0 0"><circle r="112" fill="url(#grec)"/>${[104, 94, 84, 72, 60, 50].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="2"/>`).join('')}<path d="M-104 0A104 104 0 0 1 0 -104" stroke="rgba(255,255,255,.2)" stroke-width="12" fill="none"/><path d="M104 0A104 104 0 0 1 0 104" stroke="rgba(255,255,255,.16)" stroke-width="12" fill="none"/><circle r="38" style="fill:var(--accent)"/><circle r="38" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/><circle r="5" fill="#cfd3d6"/></g></g>
+  <g transform="translate(196 283) scale(1 .21)"><circle r="118" fill="#d4d6d9" stroke="#8d949b" stroke-width="3"/><g id="grec" style="transform-origin:0 0"><circle r="112" fill="url(#grec)"/>${[104, 94, 84, 72, 60, 50].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="2"/>`).join('')}<path d="M-104 0A104 104 0 0 1 0 -104" stroke="rgba(255,255,255,.2)" stroke-width="12" fill="none"/><path d="M104 0A104 104 0 0 1 0 104" stroke="rgba(255,255,255,.16)" stroke-width="12" fill="none"/>${coverLabel(38) || `<circle r="38" style="fill:var(--accent)"/>`}<circle r="38" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/><circle r="5" fill="#cfd3d6"/></g></g>
   <g transform="translate(350 332)"><g id="gcrank" style="transform-origin:0 0"><rect x="-4" y="-3" width="8" height="8" fill="url(#gni)"/><path d="M0 0L26 0" stroke="url(#gni)" stroke-width="6" stroke-linecap="round"/><circle cx="26" cy="0" r="7" fill="url(#gbr)" stroke="#6b4c12"/></g></g>
   <circle cx="350" cy="332" r="6" fill="url(#gbr)" stroke="#6b4c12"/>
   <path d="M96 24C176 36 232 128 250 196L268 232C216 232 160 222 98 190Z" fill="url(#gbh)" stroke="#6b4c12" stroke-width="2"/>
@@ -720,6 +722,11 @@ function eightLabel(m, tr) {
   document.querySelectorAll('.ep').forEach(c => c.setAttribute('fill', +c.dataset.n === prog ? '#ff5a3c' : '#4a1d1d'));
 }
 
+function coverLabel(r) {
+  const u = S.cur && S.cur.cover_url; if (!u) return '';
+  const id = 'cl' + r;
+  return `<clipPath id="${id}"><circle r="${r}"/></clipPath><circle r="${r}" style="fill:var(--accent)"/><image href="${esc(u)}" x="${-r}" y="${-r}" width="${r * 2}" height="${r * 2}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>`;
+}
 function vinylHTML() {
   const strobe = `<circle r="134" fill="none" stroke="#e7c36a" stroke-width="7" stroke-dasharray="2.2 3.6"/>`;
   return `<svg class="sk" viewBox="0 0 460 340" role="img" aria-label="Turntable playing"><defs>
@@ -731,7 +738,7 @@ function vinylHTML() {
   <g transform="translate(190 170)"><circle r="146" fill="#0d1016"/><g id="vplat" style="transform-origin:0 0"><circle r="142" fill="url(#vgold)"/>${strobe}<circle r="128" fill="#111"/>
   <circle r="116" fill="url(#vrec)"/>${[104, 92, 80, 68, 58].map(r => `<circle r="${r}" fill="none" stroke="rgba(255,255,255,.055)" stroke-width="2"/>`).join('')}
   <path d="M-110 0A110 110 0 0 1 0 -110" stroke="rgba(255,255,255,.13)" stroke-width="14" fill="none"/><path d="M110 0A110 110 0 0 1 0 110" stroke="rgba(255,255,255,.13)" stroke-width="14" fill="none"/>
-  <circle r="42" style="fill:var(--accent)"/><text y="5" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="13" letter-spacing="2" fill="#150b1a">TRIBER</text><circle cx="0" cy="-22" r="2" fill="#150b1a"/><circle r="3.4" fill="#0b0b0d" cy="22"/></g></g>
+  ${coverLabel(42) || `<circle r="42" style="fill:var(--accent)"/><text y="5" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="13" letter-spacing="2" fill="#150b1a">TRIBER</text><circle cx="0" cy="-22" r="2" fill="#150b1a"/>`}<circle r="3.4" fill="#0b0b0d" cy="22"/></g></g>
   <circle cx="40" cy="62" r="19" fill="url(#vgold)" stroke="#6f5320" stroke-width="2"/><circle id="vled" cx="62" cy="96" r="4" fill="#5a1414"/>
   <rect x="26" y="262" width="64" height="26" rx="4" fill="#232b38" stroke="#e7c36a" stroke-width="1.5"/><text x="58" y="280" text-anchor="middle" font-family="Inter,sans-serif" font-weight="800" font-size="10" fill="#e7c36a">START·STOP</text>
   <rect x="418" y="150" width="14" height="150" rx="3" fill="#080a0e" stroke="#2c3441"/><rect x="408" y="206" width="34" height="14" rx="3" fill="url(#vgold)" stroke="#6f5320"/>
@@ -768,7 +775,7 @@ function machineHTML(skin, mix) {
     case 'cassette': return cassetteHTML();
     case 'eight': return eightHTML();
     case 'reel': return reelHTML();
-    case 'cd': return `<div class="cd"></div>`;
+    case 'cd': return `<div class="cd">${mix && mix.cover_url ? `<i class="cdl" style="background-image:url('${esc(mix.cover_url).replace(/'/g, '%27')}')"></i>` : ''}</div>`;
     case 'digital': return `<div class="digi"><div class="tk"><span id="tick">${t}</span></div><div class="bars">${bars}</div></div>`;
     default: return vinylHTML();
   }
@@ -786,6 +793,7 @@ function renderHeader() {
   $('#mTitle').textContent = m ? m.title : 'No mixes yet';
   $('#mBy').innerHTML = m ? `${esc(m.artist)}${m.genre ? ` · <span class="g">${esc(m.genre)}</span>` : ''}${m.bpm ? ` · ${m.bpm} BPM` : ''}` : 'Check back soon.';
   $('#tDur').textContent = mmss(duration());
+  const cov = $('#mCover'); if (m && m.cover_url) { cov.src = m.cover_url; cov.hidden = false; cov.onerror = () => { cov.hidden = true; }; } else { cov.hidden = true; cov.removeAttribute('src'); }
   const dl = $('#bDl');
   if (m && m.allow_download && m.audio_url) { dl.hidden = false; dl.href = downloadUrl(m); $('#dlTxt').textContent = 'Download'; } else dl.hidden = true;
   renderLike();
@@ -823,7 +831,7 @@ function renderNow() {
   if (S.skin === 'digital') { const tk = $('#tick'); if (tk) tk.textContent = (tr ? `${tr.title}${tr.artist ? ' — ' + tr.artist : ''}` : `${m.title} — ${m.artist}`); }
   cassLabel(m, tr, i); eightLabel(m, tr);
   if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
-    navigator.mediaSession.metadata = new MediaMetadata({ title: tr ? tr.title : m.title, artist: tr?.artist || m.artist, album: m.title, artwork: [{ src: new URL('assets/social-512.png', location.href).href, sizes: '512x512', type: 'image/png' }] });
+    navigator.mediaSession.metadata = new MediaMetadata({ title: tr ? tr.title : m.title, artist: tr?.artist || m.artist, album: m.title, artwork: [m.cover_url ? { src: m.cover_url, sizes: '512x512' } : { src: new URL('assets/social-512.png', location.href).href, sizes: '512x512', type: 'image/png' }] });
   }
 }
 function renderScrub() {
@@ -1105,7 +1113,7 @@ function step(dir, autoplay) {
 function seek(t) { if (!S.cur) return; const d = duration(); t = Math.max(0, Math.min(d || t, t)); if (S.cur.audio_url) audio.currentTime = t; S.lastT = t; updateProgress(); }
 function setMediaSession() {
   if (!('mediaSession' in navigator) || !S.cur) return;
-  navigator.mediaSession.metadata = new MediaMetadata({ title: S.cur.title, artist: S.cur.artist });
+  navigator.mediaSession.metadata = new MediaMetadata({ title: S.cur.title, artist: S.cur.artist, album: S.cur.title, artwork: [S.cur.cover_url ? { src: S.cur.cover_url, sizes: '512x512' } : { src: new URL('assets/social-512.png', location.href).href, sizes: '512x512', type: 'image/png' }] });
   const h = (a, f) => { try { navigator.mediaSession.setActionHandler(a, f); } catch {} };
   h('play', togglePlay); h('pause', togglePlay); h('previoustrack', () => step(-1)); h('nexttrack', () => step(1));
   h('seekbackward', () => seek(audio.currentTime - 30)); h('seekforward', () => seek(audio.currentTime + 30));
