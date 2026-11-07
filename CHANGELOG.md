@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.8.0 — 2026-11-06
+- New TRIBER emblem in the header and footer, centered on a 16:9 canvas for landscape screens and 9:16 for portrait (switches with device orientation).
+
 ## 1.7.1 — 2026-11-05
 - The now-playing strip says "Paused on" (not "Up next") when you pause mid-mix.
 

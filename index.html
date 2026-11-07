@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.7.1">
+<meta name="app-version" content="1.8.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.7.1"></script>
+<script src="config.js?v=1.8.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -65,7 +65,9 @@ a{color:inherit}
 .top{display:flex;align-items:center;gap:18px;padding:14px max(20px,env(safe-area-inset-right)) 14px max(20px,env(safe-area-inset-left));
   border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.brand img{height:38px;width:auto;display:block}
+.brand{gap:0}
+.brand img{height:50px;width:auto;display:block;margin:-6px -8px -6px 0}
+@media (orientation:portrait){.brand img{height:66px;margin:-12px -6px -12px 0}}
 .brand b{font:900 24px/1 var(--sans);letter-spacing:.04em}
 .search{flex:1;max-width:380px;margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
 .search input{background:none;border:0;outline:0;flex:1;min-width:0}
@@ -179,7 +181,9 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 .meta .gtag{color:var(--c);font-weight:600}
 
 footer{border-top:1px solid var(--line);padding:26px 20px 34px;display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:13px;text-align:center}
-footer img{height:30px}
+footer picture,footer img{display:block}
+footer img{height:150px;width:auto;max-width:90vw}
+@media (orientation:portrait){footer img{height:260px}}
 footer b{color:var(--text);letter-spacing:.14em}
 
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.22s;z-index:60;max-width:90vw}
@@ -300,12 +304,12 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.7.1"></video>
+  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.8.0"></video>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
 <header class="top">
-  <a class="brand" href="./" aria-label="Triber home"><img src="assets/triber-icon.png" alt=""><b>TRIBER</b></a>
+  <a class="brand" href="./" aria-label="Triber home"><picture><source media="(orientation:portrait)" srcset="assets/triber-logo-9x16.png?v=1.8.0" width="540" height="960"><img src="assets/triber-logo-16x9.png?v=1.8.0" width="960" height="540" alt=""></picture><b>TRIBER</b></a>
   <label class="search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
     <span class="sr">Search mixes</span>
@@ -395,7 +399,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 </main>
 
 <footer>
-  <img src="assets/triber-icon.png" alt="">
+  <picture><source media="(orientation:portrait)" srcset="assets/triber-logo-9x16.png?v=1.8.0" width="540" height="960"><img src="assets/triber-logo-16x9.png?v=1.8.0" width="960" height="540" alt="TRIBER"></picture>
   <span><b>TRIBER</b> &nbsp;True Rhythm Ignites Bodies, Energy Rising. <small id="ver" style="opacity:.6"></small></span>
 </footer>
 
