@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.8.0">
+<meta name="app-version" content="1.9.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -43,7 +43,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600;1,9..144,800&family=Inter:wght@400;500;600;800;900&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-<script src="config.js?v=1.8.0"></script>
+<script src="config.js?v=1.9.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <style>
 :root{
@@ -192,7 +192,8 @@ footer b{color:var(--text);letter-spacing:.14em}
 /* ---------- intro ---------- */
 #intro{position:fixed;inset:0;z-index:100;background:#0a050c;display:none;align-items:center;justify-content:center}
 #intro.show{display:flex}
-#intro video{width:min(100vw,calc(100vh * 16 / 9));max-height:100vh;max-height:100dvh;aspect-ratio:16/9;object-fit:contain;display:block;margin:auto;background:#0a050c}
+#intro video{width:min(100vw,calc(100vh * 16 / 9));width:min(100vw,calc(100dvh * 16 / 9));max-height:100vh;max-height:100dvh;aspect-ratio:16/9;object-fit:contain;display:block;margin:auto;background:#0a050c}
+#intro.portrait video{width:min(100vw,calc(100vh * 9 / 16));width:min(100vw,calc(100dvh * 9 / 16));aspect-ratio:9/16}
 #intro .ctl{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));display:flex;gap:8px}
 #intro .ctl button{background:rgba(21,11,26,.7);border:1px solid var(--line);border-radius:99px;padding:8px 16px;backdrop-filter:blur(6px)}
 #intro.out{opacity:0;transition:opacity .5s}
@@ -296,6 +297,25 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 .tl .tm{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;letter-spacing:.02em}
 .eq-note{margin:8px 0 0;font-size:11.5px;color:var(--muted);line-height:1.4}
 .eqp.off .eq-faders,.eqp.off canvas{opacity:.55}
+/* ---- v1.9: multicolor LED displays ---- */
+.now{flex-wrap:wrap;row-gap:8px}
+.now .ledbtn{flex:none;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:3px 9px;font:700 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;cursor:pointer}
+.now .ledbtn[aria-pressed=true]{color:var(--text);border-color:var(--accent)}
+#nowLed{flex:1 1 100%;display:block;width:100%;height:44px;border-radius:8px;background:var(--cv);border:1px solid var(--line)}
+#nowLed[hidden]{display:none}
+.fd .led{position:absolute;top:0;bottom:0;width:4px;pointer-events:none;--c1:hsl(var(--h) 92% 46%);--c2:hsl(var(--h) 100% 72%)}
+.fd .led.l{left:0}.fd .led.r{right:0}
+.fd .led::before,.fd .led::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--c1),var(--c2));-webkit-mask:repeating-linear-gradient(to top,#000 0 5px,transparent 5px 7px);mask:repeating-linear-gradient(to top,#000 0 5px,transparent 5px 7px)}
+.fd .led::before{opacity:.14}
+.fd .led::after{clip-path:inset(calc((1 - var(--lv,0)) * 100%) 0 0 0)}
+.fd .fill{position:absolute;left:50%;width:6px;margin-left:-3px;border-radius:3px;background:hsl(var(--h) 90% 55%);box-shadow:0 0 8px hsl(var(--h) 90% 55% / .55);pointer-events:none}
+.fd .hz{color:color-mix(in srgb,hsl(var(--h) 90% 58%) 70%,var(--text))}
+.fd .cap::after{background:hsl(var(--h) 80% 30%)}
+.eq-faders.m12 .slot{width:25px}
+.eq-faders.m12 .cap{width:21px;margin-left:-10.5px}
+.eq-faders.m12 .hz,.eq-faders.m12 .db{font-size:9px}
+.eq-faders.m12{gap:1px}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
@@ -304,7 +324,8 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 <body>
 
 <div id="intro" aria-label="Triber intro">
-  <video id="introVideo" muted playsinline preload="auto" src="assets/triber-stinger.mp4?v=1.8.0"></video>
+  <video id="introVideo" muted playsinline preload="auto"></video>
+  <script>(function(){var v=document.getElementById("introVideo"),seen=0;try{seen=sessionStorage.getItem("triber_intro")==="1"}catch(e){}if(v&&!seen&&!/[?&]intro=0/.test(location.search))v.src="assets/triber-intro-"+(matchMedia("(orientation: portrait)").matches?"9x16":"16x9")+".mp4?v=1.9.0"})()</script>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -331,9 +352,10 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
       <p class="byline" id="mBy"></p></div></div>
 
       <div class="now" id="now">
-        <div class="eq" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="txt"><small id="nowLabel">Now playing</small><div id="nowTxt">—</div></div>
         <div class="idx" id="nowIdx"></div>
+        <button class="ledbtn" id="ledBtn" type="button" aria-pressed="true" title="Multicolor LED display, synced to the music">LED</button>
+        <canvas id="nowLed" aria-hidden="true"></canvas>
       </div>
 
       <div class="scrub" id="scrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
@@ -356,7 +378,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
       <div class="eqp" id="eq" hidden>
         <div class="eq-top">
           <h3>Your sound</h3>
-          <div class="seg" role="radiogroup" aria-label="Equaliser bands"><button role="radio" data-mode="3">3-band</button><button role="radio" data-mode="7">7-band</button></div>
+          <div class="seg" role="radiogroup" aria-label="Equaliser bands"><button role="radio" data-mode="3">3-band</button><button role="radio" data-mode="7">7-band</button><button role="radio" data-mode="12">12-band</button></div>
           <select id="eqPreset" aria-label="Preset"></select>
           <button class="pw" id="eqPow" aria-pressed="false">OFF</button>
         </div>
@@ -903,7 +925,7 @@ async function selectMix(id, play) {
   S.cur = m;
   if (changed) {
     audio.pause(); S.playing = false; S.playId = null; S.listened = 0; S.lastT = 0; S.sent = 0;
-    if (m.audio_url) { audio.src = m.audio_url; audio.load(); } else audio.removeAttribute('src');
+    if (m.audio_url) { EQ.failed = false; audio.src = m.audio_url; audio.load(); } else audio.removeAttribute('src');
     S.tracks = []; S.comments = [];
     renderMachine(); renderHeader(); renderScrub(); renderTracklist(); renderComments(); renderNow(); renderPlayState();
     const [tr, co] = await Promise.all([api.tracks(m).catch(() => []), api.comments(m).catch(() => [])]);
@@ -917,8 +939,14 @@ async function selectMix(id, play) {
 /* ---------- Listener equaliser (v1.2) ---------- */
 const EQ_BANDS = {
   3: [{ f: 100, t: 'lowshelf', q: 0.7, l: 'Bass' }, { f: 1000, t: 'peaking', q: 0.7, l: 'Mid' }, { f: 8000, t: 'highshelf', q: 0.7, l: 'Treble' }],
-  7: [{ f: 60, t: 'lowshelf', q: 0.7, l: '60' }, { f: 150, t: 'peaking', q: 1.0, l: '150' }, { f: 400, t: 'peaking', q: 1.0, l: '400' }, { f: 1000, t: 'peaking', q: 1.0, l: '1k' }, { f: 2400, t: 'peaking', q: 1.0, l: '2.4k' }, { f: 6000, t: 'peaking', q: 1.0, l: '6k' }, { f: 15000, t: 'highshelf', q: 0.7, l: '15k' }]
+  7: [{ f: 60, t: 'lowshelf', q: 0.7, l: '60' }, { f: 150, t: 'peaking', q: 1.0, l: '150' }, { f: 400, t: 'peaking', q: 1.0, l: '400' }, { f: 1000, t: 'peaking', q: 1.0, l: '1k' }, { f: 2400, t: 'peaking', q: 1.0, l: '2.4k' }, { f: 6000, t: 'peaking', q: 1.0, l: '6k' }, { f: 15000, t: 'highshelf', q: 0.7, l: '15k' }],
+  12: [{ f: 32, t: 'lowshelf', q: 0.7, l: '32' }, { f: 56, t: 'peaking', q: 1.6, l: '56' }, { f: 100, t: 'peaking', q: 1.6, l: '100' }, { f: 175, t: 'peaking', q: 1.6, l: '175' }, { f: 310, t: 'peaking', q: 1.6, l: '310' }, { f: 540, t: 'peaking', q: 1.6, l: '540' }, { f: 950, t: 'peaking', q: 1.6, l: '950' }, { f: 1700, t: 'peaking', q: 1.6, l: '1.7k' }, { f: 3000, t: 'peaking', q: 1.6, l: '3k' }, { f: 5300, t: 'peaking', q: 1.6, l: '5.3k' }, { f: 9300, t: 'peaking', q: 1.6, l: '9.3k' }, { f: 16000, t: 'highshelf', q: 0.7, l: '16k' }]
 };
+const hueFor = f => Math.max(0, Math.min(300, 300 * Math.log(f / 30) / Math.log(16000 / 30)));
+function g12From7(g7) {
+  const x7 = EQ_BANDS[7].map(b => Math.log(b.f));
+  return EQ_BANDS[12].map(b => { const x = Math.log(b.f); if (x <= x7[0]) return g7[0]; if (x >= x7[6]) return g7[6]; let i = 0; while (x > x7[i + 1]) i++; const t = (x - x7[i]) / (x7[i + 1] - x7[i]); return Math.round((g7[i] + (g7[i + 1] - g7[i]) * t) * 2) / 2; });
+}
 const EQ_PRESETS = {
   Flat: [[0, 0, 0], [0, 0, 0, 0, 0, 0, 0]],
   'Bass boost': [[8, 0, 1], [8, 6, 2, 0, 0, 0, 0]],
@@ -930,9 +958,11 @@ const EQ_PRESETS = {
   'Small speaker': [[-6, 3, 2], [-8, -5, 2, 4, 4, 2, 0]]
 };
 const MASTER = { normalize: { th: -24, ra: 2.5, kn: 24, at: 0.012, re: 0.25, mk: 3 }, loud: { th: -30, ra: 4, kn: 18, at: 0.008, re: 0.2, mk: 7 }, max: { th: -36, ra: 6, kn: 12, at: 0.005, re: 0.15, mk: 10 } };
-const EQ = { ctx: null, src: null, pre: null, an: null, nodes: { 3: [], 7: [] }, built: false, probing: false, buf: null, raf: 0 };
-let EQS = { on: false, master: 'off', mode: 7, preset: 'Flat', g: { 3: [0, 0, 0], 7: [0, 0, 0, 0, 0, 0, 0] } };
-try { const raw = store.get('triber_eq'); if (raw) { const o = JSON.parse(raw); EQS = { ...EQS, ...o, g: { 3: (o.g?.[3] || EQS.g[3]).slice(0, 3), 7: (o.g?.[7] || EQS.g[7]).slice(0, 7) } }; } } catch {}
+const EQ = { ctx: null, src: null, pre: null, an: null, nodes: { 3: [], 7: [], 12: [] }, built: false, probing: false, failed: false, buf: null, raf: 0 };
+let EQS = { on: false, master: 'off', mode: 12, preset: 'Flat', led: true, g: { 3: [0, 0, 0], 7: [0, 0, 0, 0, 0, 0, 0], 12: new Array(12).fill(0) } };
+try { const raw = store.get('triber_eq'); if (raw) { const o = JSON.parse(raw); EQS = { ...EQS, ...o, g: { 3: (o.g?.[3] || EQS.g[3]).slice(0, 3), 7: (o.g?.[7] || EQS.g[7]).slice(0, 7), 12: (o.g?.[12] || EQS.g[12]).slice(0, 12) } }; } } catch {}
+if (![3, 7, 12].includes(EQS.mode)) EQS.mode = 12;
+EQS.led = EQS.led !== false;
 if (!(EQS.master in { off: 1, ...MASTER })) EQS.master = 'off';
 window.__eq = { EQ, get S() { return EQS; } };
 function eqSave() { store.set('triber_eq', JSON.stringify(EQS)); }
@@ -941,8 +971,8 @@ function eqCtx() {
   const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
   EQ.ctx = new AC();
   EQ.pre = EQ.ctx.createGain();
-  [3, 7].forEach(m => { EQ.nodes[m] = EQ_BANDS[m].map(b => { const n = EQ.ctx.createBiquadFilter(); n.type = b.t; n.frequency.value = b.f; n.Q.value = b.q; n.gain.value = 0; return n; }); });
-  EQ.an = EQ.ctx.createAnalyser(); EQ.an.fftSize = 2048; EQ.an.smoothingTimeConstant = 0.82; EQ.buf = new Uint8Array(EQ.an.frequencyBinCount);
+  [3, 7, 12].forEach(m => { EQ.nodes[m] = EQ_BANDS[m].map(b => { const n = EQ.ctx.createBiquadFilter(); n.type = b.t; n.frequency.value = b.f; n.Q.value = b.q; n.gain.value = 0; return n; }); });
+  EQ.an = EQ.ctx.createAnalyser(); EQ.an.fftSize = 4096; EQ.an.smoothingTimeConstant = 0.72; EQ.buf = new Uint8Array(EQ.an.frequencyBinCount);
   EQ.cmp = EQ.ctx.createDynamicsCompressor(); EQ.mk = EQ.ctx.createGain(); EQ.lim = EQ.ctx.createDynamicsCompressor(); EQ.sat = EQ.ctx.createWaveShaper();
   EQ.lim.threshold.value = -2; EQ.lim.knee.value = 0; EQ.lim.ratio.value = 20; EQ.lim.attack.value = 0.002; EQ.lim.release.value = 0.08;
   const cv = new Float32Array(4096); for (let i = 0; i < cv.length; i++) { const x = i / 2047.5 - 1, a = Math.abs(x); cv[i] = a < 0.9 ? x : Math.sign(x) * (0.9 + 0.1 * Math.tanh((a - 0.9) / 0.1)); } EQ.sat.curve = cv; EQ.sat.oversample = '4x';
@@ -952,14 +982,14 @@ function eqCtx() {
 function eqGains() { return EQS.g[EQS.mode]; }
 function eqApply() {
   if (!EQ.ctx) return;
-  [3, 7].forEach(m => EQ.nodes[m].forEach((n, i) => { n.gain.value = (m === EQS.mode && EQS.on) ? EQS.g[m][i] : 0; }));
+  [3, 7, 12].forEach(m => EQ.nodes[m].forEach((n, i) => { n.gain.value = (m === EQS.mode && EQS.on) ? EQS.g[m][i] : 0; }));
   const maxPos = EQS.on ? Math.max(0, ...eqGains()) : 0;
   EQ.pre.gain.value = Math.pow(10, -maxPos / 20);
   const M = MASTER[EQS.master]; if (M) { EQ.cmp.threshold.value = M.th; EQ.cmp.ratio.value = M.ra; EQ.cmp.knee.value = M.kn; EQ.cmp.attack.value = M.at; EQ.cmp.release.value = M.re; EQ.mk.gain.value = Math.pow(10, M.mk / 20); }
   if (EQ.built) eqWire();
 }
 function eqWire() {
-  try { EQ.src.disconnect(); EQ.pre.disconnect(); EQ.nodes[3].concat(EQ.nodes[7]).forEach(n => n.disconnect()); EQ.cmp.disconnect(); EQ.mk.disconnect(); EQ.lim.disconnect(); EQ.sat.disconnect(); EQ.an.disconnect(); } catch {}
+  try { EQ.src.disconnect(); EQ.pre.disconnect(); EQ.nodes[3].concat(EQ.nodes[7], EQ.nodes[12]).forEach(n => n.disconnect()); EQ.cmp.disconnect(); EQ.mk.disconnect(); EQ.lim.disconnect(); EQ.sat.disconnect(); EQ.an.disconnect(); } catch {}
   let last = EQ.src;
   if (EQS.on) { last.connect(EQ.pre); last = EQ.pre; EQ.nodes[EQS.mode].forEach(n => { last.connect(n); last = n; }); }
   if (EQS.master !== 'off') { last.connect(EQ.cmp); EQ.cmp.connect(EQ.mk); EQ.mk.connect(EQ.lim); EQ.lim.connect(EQ.sat); last = EQ.sat; }
@@ -980,20 +1010,23 @@ function eqProbeCors() {
     audio.load();
   });
 }
-async function eqEnable() {
+async function eqEnable(quiet) {
   if (EQ.built) return true;
-  if (!eqCtx()) { toast('Your browser does not support the equaliser.'); return false; }
+  const say = m => { if (!quiet) toast(m); };
+  if (!eqCtx()) { say('Your browser does not support the equaliser.'); return false; }
   const good = await eqProbeCors();
-  if (!good) { toast('This mix is hosted somewhere that blocks the equaliser. It plays flat instead.'); return false; }
+  if (!good) { say('This mix is hosted somewhere that blocks the equaliser. It plays flat instead.'); return false; }
   try { EQ.src = EQ.ctx.createMediaElementSource(audio); EQ.built = true; eqWire(); }
-  catch (e) { toast('Could not start the equaliser.'); return false; }
+  catch (e) { say('Could not start the equaliser.'); return false; }
   try { await EQ.ctx.resume(); } catch {}
   return true;
 }
+function fillCss(v) { const pos = (1 - (v + 12) / 24) * 100; return v >= 0 ? `top:${pos}%;height:${50 - pos}%` : `top:50%;height:${pos - 50}%`; }
 function fmtDb(v) { return (v > 0 ? '+' : '') + v.toFixed(v % 1 ? 1 : 0); }
 function eqRenderFaders() {
   const bands = EQ_BANDS[EQS.mode], g = eqGains();
-  $('#eqFaders').innerHTML = bands.map((b, i) => `<div class="fd"><span class="db" data-db="${i}">${fmtDb(g[i])}</span><div class="slot" role="slider" tabindex="0" data-i="${i}" aria-label="${b.l} Hz gain" aria-orientation="vertical" aria-valuemin="-12" aria-valuemax="12" aria-valuenow="${g[i]}" aria-valuetext="${fmtDb(g[i])} dB"><div class="cap" style="top:${(1 - (g[i] + 12) / 24) * 100}%"></div></div><span class="hz">${b.l}</span></div>`).join('');
+  $('#eqFaders').classList.toggle('m12', EQS.mode === 12); VIZ.slots = null;
+  $('#eqFaders').innerHTML = bands.map((b, i) => `<div class="fd" style="--h:${Math.round(hueFor(b.f))}"><span class="db" data-db="${i}">${fmtDb(g[i])}</span><div class="slot" role="slider" tabindex="0" data-i="${i}" aria-label="${b.l} Hz gain" aria-orientation="vertical" aria-valuemin="-12" aria-valuemax="12" aria-valuenow="${g[i]}" aria-valuetext="${fmtDb(g[i])} dB"><i class="led l"></i><i class="led r"></i><div class="fill" style="${fillCss(g[i])}"></div><div class="cap" style="top:${(1 - (g[i] + 12) / 24) * 100}%"></div></div><span class="hz">${b.l}</span></div>`).join('');
   document.querySelectorAll('#eq .seg button').forEach(b => b.setAttribute('aria-checked', String(+b.dataset.mode === EQS.mode)));
   document.querySelectorAll('#mstSeg button').forEach(b => b.setAttribute('aria-checked', String(b.dataset.m === EQS.master)));
   $('#eqPow').textContent = EQS.on ? 'ON' : 'OFF'; $('#eqPow').setAttribute('aria-pressed', String(EQS.on));
@@ -1005,7 +1038,7 @@ function eqSetGain(i, v, silent) {
   v = Math.max(-12, Math.min(12, Math.round(v * 2) / 2));
   eqGains()[i] = v; EQS.preset = 'Custom'; $('#eqPreset').value = 'Custom';
   const slot = document.querySelector(`#eq .slot[data-i="${i}"]`);
-  if (slot) { slot.querySelector('.cap').style.top = (1 - (v + 12) / 24) * 100 + '%'; slot.setAttribute('aria-valuenow', v); slot.setAttribute('aria-valuetext', fmtDb(v) + ' dB'); document.querySelector(`#eq .db[data-db="${i}"]`).textContent = fmtDb(v); }
+  if (slot) { slot.querySelector('.cap').style.top = (1 - (v + 12) / 24) * 100 + '%'; slot.querySelector('.fill').style.cssText = fillCss(v); slot.setAttribute('aria-valuenow', v); slot.setAttribute('aria-valuetext', fmtDb(v) + ' dB'); document.querySelector(`#eq .db[data-db="${i}"]`).textContent = fmtDb(v); }
   eqApply(); eqDraw(); if (!silent) eqSave();
 }
 function eqDraw() {
@@ -1020,11 +1053,10 @@ function eqDraw() {
   c.strokeStyle = gridC; c.lineWidth = 1; c.fillStyle = txtC; c.font = '10px ui-monospace,Menlo,monospace';
   [50, 100, 200, 500, 1000, 2000, 5000, 10000].forEach(f => { const x = xOf(f); c.beginPath(); c.moveTo(x, 0); c.lineTo(x, H); c.stroke(); c.fillText(f >= 1000 ? f / 1000 + 'k' : f, x + 3, H - 4); });
   [-12, -6, 0, 6, 12].forEach(d => { c.strokeStyle = gridC; c.lineWidth = d === 0 ? 2 : 1; c.beginPath(); c.moveTo(0, yOf(d)); c.lineTo(W, yOf(d)); c.stroke(); });
-  const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#A78BFA';
   if (EQ.built && EQ.an && !audio.paused) {
-    EQ.an.getByteFrequencyData(EQ.buf);
-    const sr = EQ.ctx.sampleRate, n = EQ.buf.length, bars = 56; c.fillStyle = accent; c.globalAlpha = 0.28;
+    const sr = EQ.ctx.sampleRate, n = EQ.buf.length, bars = 56; c.globalAlpha = 0.42;
     for (let k = 0; k < bars; k++) {
+      c.fillStyle = `hsl(${hueFor(20 * Math.pow(1000, (k + 0.5) / bars))} 92% 58%)`;
       const f0 = 20 * Math.pow(1000, k / bars), f1 = 20 * Math.pow(1000, (k + 1) / bars);
       let i0 = Math.floor(f0 / (sr / 2) * n), i1 = Math.max(i0 + 1, Math.ceil(f1 / (sr / 2) * n)), m = 0;
       for (let i = i0; i < i1 && i < n; i++) m = Math.max(m, EQ.buf[i]);
@@ -1038,20 +1070,89 @@ function eqDraw() {
   for (let k = 0; k < N; k++) fr[k] = 20 * Math.pow(1000, k / (N - 1));
   if (nodes) nodes.forEach((nd, i) => { const saved = nd.gain.value; nd.gain.value = g[i]; nd.getFrequencyResponse(fr, mag, ph); nd.gain.value = saved; for (let k = 0; k < N; k++) tot[k] *= mag[k]; });
   c.beginPath(); for (let k = 0; k < N; k++) { const db = 20 * Math.log10(tot[k]), x = xOf(fr[k]), y = yOf(Math.max(-15, Math.min(15, db))); k ? c.lineTo(x, y) : c.moveTo(x, y); }
-  c.lineWidth = 2; c.strokeStyle = EQS.on ? cs.getPropertyValue('--teal').trim() || '#7fb7a3' : offC; c.stroke();
-  bands.forEach((b, i) => { c.fillStyle = EQS.on ? dotC : offC; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 3.5, 0, 7); c.fill(); });
+  c.lineWidth = 2; let stroke = offC; if (EQS.on) { stroke = c.createLinearGradient(0, 0, W, 0); for (let s = 0; s <= 12; s++) stroke.addColorStop(s / 12, `hsl(${hueFor(20 * Math.pow(1000, s / 12))} 95% 62%)`); } c.strokeStyle = stroke; c.stroke();
+  bands.forEach((b, i) => { c.fillStyle = EQS.on ? `hsl(${hueFor(b.f)} 95% 66%)` : offC; c.beginPath(); c.arc(xOf(b.f), yOf(g[i]), 3.5, 0, 7); c.fill(); });
 }
-function eqLoop() { cancelAnimationFrame(EQ.raf); if ($('#eq').hidden) return; eqDraw(); const gr = $('#mstGr'); if (gr) gr.textContent = EQ.built && EQS.master !== 'off' && !audio.paused ? 'GR ' + EQ.cmp.reduction.toFixed(1) + ' dB' : ''; if (EQ.built && !audio.paused) EQ.raf = requestAnimationFrame(eqLoop); }
+const VIZ = { raf: 0, lv: [], pk: [], band: [], slots: null };
+function vizKick() { if (!VIZ.raf) VIZ.raf = requestAnimationFrame(vizFrame); }
+function eqLoop() { vizKick(); }
+function binLevel(f0, f1) {
+  const n = EQ.buf.length, nyq = EQ.ctx.sampleRate / 2;
+  const i0 = Math.max(0, Math.floor(f0 / nyq * n)); let i1 = Math.ceil(f1 / nyq * n); if (i1 <= i0) i1 = i0 + 1;
+  let m = 0; for (let i = i0; i < i1 && i < n; i++) if (EQ.buf[i] > m) m = EQ.buf[i];
+  return m / 255;
+}
+const ledShape = (v, t) => Math.min(1, Math.pow(v, 1.5) * (0.9 + 0.75 * t));
+function drawNowLed(live) {
+  const cv = $('#nowLed'); if (!cv || cv.hidden) return false;
+  const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight; if (!W) return false;
+  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+  const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+  const gap = 2, colW = W < 420 ? 6 : 8, cols = Math.max(16, Math.floor((W - 12 + gap) / (colW + gap))), rows = 8, pad = 5;
+  const segH = (H - pad * 2 - (rows - 1) * gap) / rows, x0 = (W - (cols * (colW + gap) - gap)) / 2;
+  if (VIZ.lv.length !== cols) { VIZ.lv = new Array(cols).fill(0); VIZ.pk = new Array(cols).fill(0); }
+  let moving = false;
+  for (let k = 0; k < cols; k++) {
+    const t = k / (cols - 1), f0 = 30 * Math.pow(16000 / 30, k / cols), f1 = 30 * Math.pow(16000 / 30, (k + 1) / cols);
+    const v = live ? ledShape(binLevel(f0, f1), t) : 0;
+    VIZ.lv[k] = v > VIZ.lv[k] ? v : Math.max(v, VIZ.lv[k] - 0.07);
+    VIZ.pk[k] = v > VIZ.pk[k] ? v : Math.max(0, VIZ.pk[k] - 0.012);
+    if (VIZ.lv[k] > 0.01 || VIZ.pk[k] > 0.01) moving = true;
+    const hue = Math.round(300 * t), lit = Math.round(VIZ.lv[k] * rows), pkRow = Math.min(rows - 1, Math.round(VIZ.pk[k] * rows) - 1), x = x0 + k * (colW + gap);
+    for (let r = 0; r < rows; r++) {
+      const y = H - pad - (r + 1) * segH - r * gap, on = r < lit, isPk = !on && r === pkRow && VIZ.pk[k] > 0.05;
+      c.globalAlpha = on ? 1 : isPk ? 0.85 : 0.13;
+      c.fillStyle = `hsl(${hue} 96% ${on ? 46 + r * 3.5 : isPk ? 78 : 56}%)`;
+      c.beginPath(); c.roundRect ? c.roundRect(x, y, colW, segH, 1.5) : c.rect(x, y, colW, segH); c.fill();
+    }
+  }
+  c.globalAlpha = 1;
+  if (EQ.failed && !audio.paused) { c.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#999'; c.font = '11px system-ui,sans-serif'; c.textAlign = 'center'; c.fillText('LED sync needs an audio host that allows it', W / 2, H / 2 + 4); }
+  return moving;
+}
+function updateFaderLeds(live) {
+  if ($('#eq').hidden) return false;
+  if (!VIZ.slots) VIZ.slots = [...document.querySelectorAll('#eqFaders .slot')];
+  const bands = EQ_BANDS[EQS.mode]; let moving = false;
+  VIZ.slots.forEach((sl, i) => {
+    const b = bands[i], prev = bands[i - 1] ? bands[i - 1].f : b.f * b.f / bands[i + 1].f, next = bands[i + 1] ? bands[i + 1].f : b.f * b.f / bands[i - 1].f;
+    const v = live ? ledShape(binLevel(Math.sqrt(b.f * prev), Math.sqrt(b.f * next)), i / (bands.length - 1)) : 0;
+    const o = VIZ.band[i] || 0, nv = v > o ? v : Math.max(v, o - 0.07); VIZ.band[i] = nv; if (nv > 0.01) moving = true;
+    sl.style.setProperty('--lv', nv.toFixed(3));
+  });
+  return moving;
+}
+function vizFrame() {
+  VIZ.raf = 0;
+  const live = !!(EQ.built && EQ.an && EQ.ctx && !audio.paused);
+  if (live) EQ.an.getByteFrequencyData(EQ.buf);
+  const m1 = drawNowLed(live), m2 = updateFaderLeds(live);
+  if (!$('#eq').hidden) eqDraw();
+  const gr = $('#mstGr'); if (gr) gr.textContent = live && EQS.master !== 'off' ? 'GR ' + EQ.cmp.reduction.toFixed(1) + ' dB' : '';
+  if (live || m1 || m2) vizKick();
+}
+function ledInit() {
+  const btn = $('#ledBtn'), cv = $('#nowLed');
+  const sync = () => { cv.hidden = !EQS.led; btn.setAttribute('aria-pressed', String(EQS.led)); };
+  sync();
+  btn.addEventListener('click', async () => {
+    EQS.led = !EQS.led; eqSave(); sync();
+    if (EQS.led && !audio.paused && !EQ.built && !EQ.failed) { eqCtx(); try { await EQ.ctx.resume(); } catch {} const ok = await eqEnable(true); if (!ok) EQ.failed = true; }
+    vizKick();
+  });
+  window.addEventListener('resize', vizKick);
+  vizKick();
+}
 function eqInit() {
   $('#eqPreset').innerHTML = Object.keys(EQ_PRESETS).concat('Custom').map(n => `<option>${n}</option>`).join('');
   $('#eqPreset').value = EQS.preset in EQ_PRESETS ? EQS.preset : 'Custom';
-  eqRenderFaders();
+  eqRenderFaders(); ledInit();
   $('#bEq').addEventListener('click', () => {
     const h = $('#eq').hidden; $('#eq').hidden = !h; $('#bEq').setAttribute('aria-expanded', String(h));
     if (h) { eqCtx(); eqRenderFaders(); eqLoop(); }
   });
   $('#eq .seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; EQS.mode = +b.dataset.mode; eqApply(); eqSave(); eqRenderFaders(); });
-  $('#eqPreset').addEventListener('change', e => { const pr = EQ_PRESETS[e.target.value]; if (!pr) return; EQS.preset = e.target.value; EQS.g[3] = pr[0].slice(); EQS.g[7] = pr[1].slice(); eqApply(); eqSave(); eqRenderFaders(); });
+  $('#eqPreset').addEventListener('change', e => { const pr = EQ_PRESETS[e.target.value]; if (!pr) return; EQS.preset = e.target.value; EQS.g[3] = pr[0].slice(); EQS.g[7] = pr[1].slice(); EQS.g[12] = g12From7(pr[1]); eqApply(); eqSave(); eqRenderFaders(); });
   $('#eqPow').addEventListener('click', async () => {
     EQS.on = !EQS.on; eqSave(); eqCtx(); eqRenderFaders();
     if (EQS.on) { const ok = await eqEnable(); if (!ok) { EQS.on = false; eqSave(); } }
@@ -1073,14 +1174,17 @@ function eqInit() {
     else if (e.key === 'PageUp') n = v + 3; else if (e.key === 'PageDown') n = v - 3; else if (e.key === 'Home') n = 12; else if (e.key === 'End') n = -12; else if (e.key === '0') n = 0;
     if (n !== null) { e.preventDefault(); eqSetGain(i, n); }
   });
-  audio.addEventListener('play', () => { if (EQ.ctx && EQ.ctx.state === 'suspended') EQ.ctx.resume().catch(() => {}); eqLoop(); });
+  audio.addEventListener('play', () => { if (EQ.ctx && EQ.ctx.state === 'suspended') EQ.ctx.resume().catch(() => {}); vizKick(); });
+  audio.addEventListener('pause', vizKick);
 }
 
 function startPlayback() {
   const m = S.cur; if (!m) return;
   if (!m.audio_url) { toast('This mix has no audio attached yet.'); return; }
   const go = () => audio.play().catch(() => { S.playing = false; renderPlayState(); toast('Could not load this mix. Check your connection and try again.'); });
-  if ((EQS.on || EQS.master !== 'off') && !EQ.built) { eqEnable().then(ok => { if (!ok) { EQS.on = false; EQS.master = 'off'; eqSave(); eqRenderFaders(); } go(); }); return; }
+  const wantEq = EQS.on || EQS.master !== 'off', wantGraph = wantEq || (EQS.led && !EQ.failed);
+  if (wantGraph) { const c = eqCtx(); try { c && c.resume(); } catch {} }
+  if (wantGraph && !EQ.built) { eqEnable(!wantEq).then(ok => { if (!ok) { EQ.failed = true; if (wantEq) { EQS.on = false; EQS.master = 'off'; eqSave(); eqRenderFaders(); } } vizKick(); go(); }); return; }
   go();
 }
 function togglePlay() { if (!S.cur) return; if (audio.paused) startPlayback(); else audio.pause(); }
@@ -1183,6 +1287,8 @@ function intro() {
   let seen = false; try { seen = sessionStorage.getItem('triber_intro') === '1'; } catch {}
   if (reduce || seen || qs.get('intro') === '0') return;
   try { sessionStorage.setItem('triber_intro', '1'); } catch {}
+  if (!v.getAttribute('src')) v.src = 'assets/triber-intro-' + (matchMedia('(orientation: portrait)').matches ? '9x16' : '16x9') + '.mp4?v=1.9.0';
+  el.classList.toggle('portrait', /9x16/.test(v.getAttribute('src')));
   el.classList.add('show');
   const done = () => { el.classList.add('out'); setTimeout(() => { el.classList.remove('show'); v.pause(); v.removeAttribute('src'); v.load(); }, 500); };
   v.addEventListener('ended', done); v.addEventListener('error', done);

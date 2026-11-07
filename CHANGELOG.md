@@ -1,6 +1,12 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.9.0 — 2026-11-06
+- New intro film: a 16:9 version for landscape and a 9:16 version for portrait (the 16:9 picture stays centered, with a soft blurred fill instead of black bars). The right one is picked by device orientation.
+- The Now playing window carries a multicolor LED spectrum synced to the music: red bass through green mids to violet highs. The LED pill turns it off.
+- The equaliser gains a 12-band mode (32 Hz to 16 kHz). Every band has its own color, a live LED meter on both sides of its fader, a colored gain fill, and the spectrum and response curve are colored by frequency. Presets carry over to 12 bands.
+- Playback now routes through the audio engine by default so the LEDs can read the music. If an audio host blocks that, the mix plays flat and the LEDs stay dim.
+
 ## 1.8.0 — 2026-11-06
 - New TRIBER emblem in the header and footer, centered on a 16:9 canvas for landscape screens and 9:16 for portrait (switches with device orientation).
 
