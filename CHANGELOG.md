@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.9.2 — 2026-11-08
+- Intro film: the white/grey card and grey flash behind the logo are keyed out, so the emblem, waveform and TRIBER lettering play on the dark backdrop the whole way through. Still full frame and uncropped in 16:9 and 9:16 (portrait uses a darker blurred fill). Rough edge: a faint light smudge can show beside the emblem for a fraction of a second near the 4 second mark.
+
 ## 1.9.1 — 2026-11-08
 - Intro film replaced with the new Triber.mp4 at full frame, nothing cropped: 16:9 for landscape, and the whole 16:9 picture centered over a soft blurred fill for portrait. The sparkle mark in the bottom-right corner is painted out in both.
 
