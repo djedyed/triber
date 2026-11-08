@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.13.0 — 2026-11-08
+- The Email menu now holds the full sign-in from the back office: Google, Apple, Microsoft, Yahoo and passkey buttons, then email + password with Sign in, Create account and Forgot password, plus a set-new-password step. Share by email and the emailed sign-in link sit below it. The phone code has its own "Phone" menu (shown only when `auth.phone` is on). In `config.js`, `auth.providers` takes google, apple, azure, custom:yahoo (and discord, spotify, twitch, facebook, twitter); `password` and `passkeys` switch the other two. A method that is not enabled in Supabase shows Supabase's own message when tapped.
+
 ## 1.12.0 — 2026-11-08
 - Cleaner, shorter welcome screen: four drop-down menus (Sign in, Messenger, Social media, Email) instead of one long list, one open at a time. Messenger menu: WhatsApp, Telegram, Messenger, Signal, Discord. Social media menu: socials plus Spotify, SoundCloud, Mixcloud, Apple Music, Bandcamp. Email menu: share by email, write to TRIBER (set `social.email`), and the sign-in link when enabled. `social.messenger` takes a m.me link; without it Messenger opens its share sheet on phones only.
 
