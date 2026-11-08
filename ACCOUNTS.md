@@ -23,3 +23,8 @@ Telegram and WhatsApp *join* buttons are separate (they live under `social`). Te
 
 ## Listeners
 Account button opens: display name, two-step sign-in (QR code, then a 6-digit code), sign out, delete my account. After sign-in with MFA on, a code is asked for each new session.
+
+## Passkeys for listeners (v1.14.0)
+Flow: a new listener signs in once (email link, password or a provider), is offered "Add a passkey", and from then on taps "Sign in with a passkey" (fingerprint, face or device PIN). Supabase cannot create an account from a passkey alone: a passkey can only be added while signed in.
+Supabase > Authentication > Passkeys > enable. **The Relying Party ID is one value for the whole project and must be the site's bare domain.** The public site lives on `djedyed.github.io` and the back office on `triberabo.pages.dev`; these share no parent domain, so one project can serve passkeys for only one of them. Recommended: RP ID `djedyed.github.io` with origin `https://djedyed.github.io` for listeners, and keep the back office on password + Google/Microsoft. To have both, put both on one custom domain (e.g. `triber.example`, `www.` for listeners and `abo.` for the back office) and use that as the RP ID.
+Passkeys are tied to the RP ID: changing it later orphans every registered passkey. Passkeys are a Supabase beta.
