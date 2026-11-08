@@ -1,6 +1,10 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.10.0 — 2026-11-08
+- New welcome screen after the intro (once per device; `?welcome=1` shows it again, `?welcome=0` skips it), laid out like the back-office sign-in: logo, Auto/Warm toggles, WhatsApp and Telegram buttons, 18 more social and music platforms, then Enter TRIBER. Set the real links in `config.js` under `social`; until then WhatsApp, Telegram, Facebook, X, Threads, Reddit and Bluesky open a share window and the rest say "Link coming soon".
+- Logo refreshed everywhere: site icon, favicon, home-screen icon and share image now use the rainbow emblem (the back office gets the same files).
+
 ## 1.9.4 — 2026-11-08
 - Intro film background changed from the dark navy (#06070A, with a faint glow near the top) to pure black (#000000) in both the 16:9 and 9:16 versions. The intro screen behind the video is now black too, so there is no edge between them. Rough edge: a faint grey smudge can still show beside the emblem for a fraction of a second near the 4 second mark.
 
