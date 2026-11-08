@@ -1,6 +1,10 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.11.0 — 2026-11-08
+- Optional listener accounts (all off until enabled in `config.js`, see ACCOUNTS.md): sign in with Google, Apple, Facebook, Discord, Spotify, Twitch or X; a phone code by WhatsApp (needs a Twilio account in Supabase, paid per message); an email link; and authenticator-app two-step sign-in (free) with an Account panel to set it up, rename yourself, sign out or delete your account. Needs `supabase/003_listeners.sql`.
+- Fixed: `config.js` was cached under `?v=1.9.0`; it now follows the release number.
+
 ## 1.10.0 — 2026-11-08
 - New welcome screen after the intro (once per device; `?welcome=1` shows it again, `?welcome=0` skips it), laid out like the back-office sign-in: logo, Auto/Warm toggles, WhatsApp and Telegram buttons, 18 more social and music platforms, then Enter TRIBER. Set the real links in `config.js` under `social`; until then WhatsApp, Telegram, Facebook, X, Threads, Reddit and Bluesky open a share window and the rest say "Link coming soon".
 - Logo refreshed everywhere: site icon, favicon, home-screen icon and share image now use the rainbow emblem (the back office gets the same files).
