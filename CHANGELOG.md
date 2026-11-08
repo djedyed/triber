@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.12.0 — 2026-11-08
+- Cleaner, shorter welcome screen: four drop-down menus (Sign in, Messenger, Social media, Email) instead of one long list, one open at a time. Messenger menu: WhatsApp, Telegram, Messenger, Signal, Discord. Social media menu: socials plus Spotify, SoundCloud, Mixcloud, Apple Music, Bandcamp. Email menu: share by email, write to TRIBER (set `social.email`), and the sign-in link when enabled. `social.messenger` takes a m.me link; without it Messenger opens its share sheet on phones only.
+
 ## 1.11.0 — 2026-11-08
 - Optional listener accounts (all off until enabled in `config.js`, see ACCOUNTS.md): sign in with Google, Apple, Facebook, Discord, Spotify, Twitch or X; a phone code by WhatsApp (needs a Twilio account in Supabase, paid per message); an email link; and authenticator-app two-step sign-in (free) with an Account panel to set it up, rename yourself, sign out or delete your account. Needs `supabase/003_listeners.sql`.
 - Fixed: `config.js` was cached under `?v=1.9.0`; it now follows the release number.

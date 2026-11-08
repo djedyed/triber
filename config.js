@@ -8,5 +8,5 @@ window.TRIBER_CONFIG = {
   // Welcome screen links (https only). Empty = WhatsApp/Telegram/Facebook/X/Threads/Reddit/Bluesky open a "share TRIBER" window; others show "Link coming soon".
   // Listener sign-in. A method appears only when listed/enabled here AND switched on in Supabase (Auth > Providers). See ACCOUNTS.md
   auth: { providers: [], phone: false, phoneChannel: "whatsapp", email: false, mfa: true },
-  social: { whatsapp: "", telegram: "", instagram: "", tiktok: "", youtube: "", facebook: "", x: "", threads: "", snapchat: "", discord: "", spotify: "", soundcloud: "", mixcloud: "", applemusic: "", bandcamp: "", twitch: "", bluesky: "", reddit: "", pinterest: "", signal: "" }
+  social: { whatsapp: "", telegram: "", instagram: "", tiktok: "", youtube: "", facebook: "", x: "", threads: "", snapchat: "", discord: "", spotify: "", soundcloud: "", mixcloud: "", applemusic: "", bandcamp: "", twitch: "", bluesky: "", reddit: "", pinterest: "", signal: "", messenger: "", email: "" }
 };
