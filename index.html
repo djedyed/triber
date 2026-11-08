@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.9.0">
+<meta name="app-version" content="1.9.1">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -325,7 +325,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 
 <div id="intro" aria-label="Triber intro">
   <video id="introVideo" muted playsinline preload="auto"></video>
-  <script>(function(){var v=document.getElementById("introVideo"),seen=0;try{seen=sessionStorage.getItem("triber_intro")==="1"}catch(e){}if(v&&!seen&&!/[?&]intro=0/.test(location.search))v.src="assets/triber-intro-"+(matchMedia("(orientation: portrait)").matches?"9x16":"16x9")+".mp4?v=1.9.0"})()</script>
+  <script>(function(){var v=document.getElementById("introVideo"),seen=0;try{seen=sessionStorage.getItem("triber_intro")==="1"}catch(e){}if(v&&!seen&&!/[?&]intro=0/.test(location.search))v.src="assets/triber-intro-"+(matchMedia("(orientation: portrait)").matches?"9x16":"16x9")+".mp4?v=1.9.1"})()</script>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -1287,7 +1287,7 @@ function intro() {
   let seen = false; try { seen = sessionStorage.getItem('triber_intro') === '1'; } catch {}
   if (reduce || seen || qs.get('intro') === '0') return;
   try { sessionStorage.setItem('triber_intro', '1'); } catch {}
-  if (!v.getAttribute('src')) v.src = 'assets/triber-intro-' + (matchMedia('(orientation: portrait)').matches ? '9x16' : '16x9') + '.mp4?v=1.9.0';
+  if (!v.getAttribute('src')) v.src = 'assets/triber-intro-' + (matchMedia('(orientation: portrait)').matches ? '9x16' : '16x9') + '.mp4?v=1.9.1';
   el.classList.toggle('portrait', /9x16/.test(v.getAttribute('src')));
   el.classList.add('show');
   const done = () => { el.classList.add('out'); setTimeout(() => { el.classList.remove('show'); v.pause(); v.removeAttribute('src'); v.load(); }, 500); };

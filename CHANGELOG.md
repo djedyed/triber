@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.9.1 — 2026-11-08
+- Intro film replaced with the new Triber.mp4 at full frame, nothing cropped: 16:9 for landscape, and the whole 16:9 picture centered over a soft blurred fill for portrait. The sparkle mark in the bottom-right corner is painted out in both.
+
 ## 1.9.0 — 2026-11-06
 - New intro film: a 16:9 version for landscape and a 9:16 version for portrait (the 16:9 picture stays centered, with a soft blurred fill instead of black bars). The right one is picked by device orientation.
 - The Now playing window carries a multicolor LED spectrum synced to the music: red bass through green mids to violet highs. The LED pill turns it off.
