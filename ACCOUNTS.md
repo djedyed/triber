@@ -14,6 +14,7 @@ Each method appears only when it is listed in `config.js` under `auth` AND switc
 |---|---|---|---|
 | Google, Apple, Facebook, Discord, Spotify, Twitch, X | `providers: ["google", ...]` (X is `twitter`) | enable the provider with its app id/secret | free; Apple needs a paid developer account |
 | Phone code by WhatsApp | `phone: true, phoneChannel: "whatsapp"` | Providers > Phone, Twilio with the WhatsApp channel | paid per message |
+| Phone code, your own (free) |  `phone: true, phoneChannel: "sms"` | Hooks > Send SMS > HTTPS pointing at Talking Drum (see talkingdrum/README.md) | WhatsApp free (unofficial), SMS = your SIM plan |
 | Phone code by SMS | `phone: true, phoneChannel: "sms"` | Providers > Phone, Twilio/MessageBird/Vonage | paid per message |
 | Email link | `email: true` | Email provider (built-in mail is rate-limited; use your own SMTP for volume) | free |
 | Authenticator app (MFA) | `mfa: true` | on by default | free |
