@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.9.3 — 2026-11-08
+- Portrait intro: the colored blurred fill above and below the picture is gone. The 16:9 picture stays centered horizontally and vertically on the same dark backdrop as the film itself, with its top and bottom edges feathered into it so there is no visible strip. Landscape is unchanged.
+
 ## 1.9.2 — 2026-11-08
 - Intro film: the white/grey card and grey flash behind the logo are keyed out, so the emblem, waveform and TRIBER lettering play on the dark backdrop the whole way through. Still full frame and uncropped in 16:9 and 9:16 (portrait uses a darker blurred fill). Rough edge: a faint light smudge can show beside the emblem for a fraction of a second near the 4 second mark.
 
