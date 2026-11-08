@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.9.3">
+<meta name="app-version" content="1.9.4">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -190,9 +190,9 @@ footer b{color:var(--text);letter-spacing:.14em}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- intro ---------- */
-#intro{position:fixed;inset:0;z-index:100;background:#0a050c;display:none;align-items:center;justify-content:center}
+#intro{position:fixed;inset:0;z-index:100;background:#000;display:none;align-items:center;justify-content:center}
 #intro.show{display:flex}
-#intro video{width:min(100vw,calc(100vh * 16 / 9));width:min(100vw,calc(100dvh * 16 / 9));max-height:100vh;max-height:100dvh;aspect-ratio:16/9;object-fit:contain;display:block;margin:auto;background:#0a050c}
+#intro video{width:min(100vw,calc(100vh * 16 / 9));width:min(100vw,calc(100dvh * 16 / 9));max-height:100vh;max-height:100dvh;aspect-ratio:16/9;object-fit:contain;display:block;margin:auto;background:#000}
 #intro.portrait video{width:min(100vw,calc(100vh * 9 / 16));width:min(100vw,calc(100dvh * 9 / 16));aspect-ratio:9/16}
 #intro .ctl{position:absolute;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));display:flex;gap:8px}
 #intro .ctl button{background:rgba(21,11,26,.7);border:1px solid var(--line);border-radius:99px;padding:8px 16px;backdrop-filter:blur(6px)}
@@ -325,7 +325,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 
 <div id="intro" aria-label="Triber intro">
   <video id="introVideo" muted playsinline preload="auto"></video>
-  <script>(function(){var v=document.getElementById("introVideo"),seen=0;try{seen=sessionStorage.getItem("triber_intro")==="1"}catch(e){}if(v&&!seen&&!/[?&]intro=0/.test(location.search))v.src="assets/triber-intro-"+(matchMedia("(orientation: portrait)").matches?"9x16":"16x9")+".mp4?v=1.9.3"})()</script>
+  <script>(function(){var v=document.getElementById("introVideo"),seen=0;try{seen=sessionStorage.getItem("triber_intro")==="1"}catch(e){}if(v&&!seen&&!/[?&]intro=0/.test(location.search))v.src="assets/triber-intro-"+(matchMedia("(orientation: portrait)").matches?"9x16":"16x9")+".mp4?v=1.9.4"})()</script>
   <div class="ctl"><button id="introSound" type="button">Sound on</button><button id="introSkip" type="button">Skip</button></div>
 </div>
 
@@ -1287,7 +1287,7 @@ function intro() {
   let seen = false; try { seen = sessionStorage.getItem('triber_intro') === '1'; } catch {}
   if (reduce || seen || qs.get('intro') === '0') return;
   try { sessionStorage.setItem('triber_intro', '1'); } catch {}
-  if (!v.getAttribute('src')) v.src = 'assets/triber-intro-' + (matchMedia('(orientation: portrait)').matches ? '9x16' : '16x9') + '.mp4?v=1.9.3';
+  if (!v.getAttribute('src')) v.src = 'assets/triber-intro-' + (matchMedia('(orientation: portrait)').matches ? '9x16' : '16x9') + '.mp4?v=1.9.4';
   el.classList.toggle('portrait', /9x16/.test(v.getAttribute('src')));
   el.classList.add('show');
   const done = () => { el.classList.add('out'); setTimeout(() => { el.classList.remove('show'); v.pause(); v.removeAttribute('src'); v.load(); }, 500); };

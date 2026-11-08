@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.9.4 — 2026-11-08
+- Intro film background changed from the dark navy (#06070A, with a faint glow near the top) to pure black (#000000) in both the 16:9 and 9:16 versions. The intro screen behind the video is now black too, so there is no edge between them. Rough edge: a faint grey smudge can still show beside the emblem for a fraction of a second near the 4 second mark.
+
 ## 1.9.3 — 2026-11-08
 - Portrait intro: the colored blurred fill above and below the picture is gone. The 16:9 picture stays centered horizontally and vertically on the same dark backdrop as the film itself, with its top and bottom edges feathered into it so there is no visible strip. Landscape is unchanged.
 
