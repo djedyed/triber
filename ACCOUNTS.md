@@ -28,3 +28,10 @@ Account button opens: display name, two-step sign-in (QR code, then a 6-digit co
 Flow: a new listener signs in once (email link, password or a provider), is offered "Add a passkey", and from then on taps "Sign in with a passkey" (fingerprint, face or device PIN). Supabase cannot create an account from a passkey alone: a passkey can only be added while signed in.
 Supabase > Authentication > Passkeys > enable. **The Relying Party ID is one value for the whole project and must be the site's bare domain.** The public site lives on `djedyed.github.io` and the back office on `triberabo.pages.dev`; these share no parent domain, so one project can serve passkeys for only one of them. Recommended: RP ID `djedyed.github.io` with origin `https://djedyed.github.io` for listeners, and keep the back office on password + Google/Microsoft. To have both, put both on one custom domain (e.g. `triber.example`, `www.` for listeners and `abo.` for the back office) and use that as the RP ID.
 Passkeys are tied to the RP ID: changing it later orphans every registered passkey. Passkeys are a Supabase beta.
+
+## If Google (or any sign-in or email link) sends you to the back office
+Supabase only returns people to a page listed under Authentication > URL Configuration > **Redirect URLs**. If the page the sign-in started from is not on that list, Supabase quietly uses the **Site URL** instead. With the Site URL set to the back office, a listener who signs in on the public site lands on `triberabo.pages.dev` (and an admin sees the admin).
+Fix in Supabase (Authentication > URL Configuration):
+1. **Site URL**: `https://djedyed.github.io/triber/` (the public site is the default for everyone).
+2. **Redirect URLs**, add all of: `https://djedyed.github.io/triber/`, `https://djedyed.github.io/triber/**`, `https://triberabo.pages.dev/`, `https://triberabo.pages.dev/**`, `http://localhost:8080/**`.
+The back office always asks to come back to itself, so it keeps working. Also confirm the Google provider's Authorized redirect URI in Google Cloud is `https://qprvzwjmedxvtdyljhut.supabase.co/auth/v1/callback` (that one URL serves both sites).
