@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.14.1 — 2026-11-08
+- Listener login switched OFF for now (config only; the code stays for the roll-out): no Sign in or Account button, no sign-in or passkey or phone options. Everyone can listen without an account. The welcome card still shows social and share links; set `showWelcome: false` in `config.js` to hide it too. Also fixed: the Sign in button could show (and do nothing) when accounts were off.
+
 ## 1.14.0 — 2026-11-08
 - Passkey onboarding for listeners: after a listener signs in the first time, a "Make next time one tap" card offers to add a passkey (Not now is remembered). Account now has a Passkeys section to add, rename and delete them, and the welcome Email menu's "Sign in with a passkey" button signs in with one. Needs Supabase passkeys switched on, see ACCOUNTS.md (the Relying Party ID is one per project).
 
