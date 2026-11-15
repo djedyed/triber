@@ -1,6 +1,11 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.15.0 — 2026-11-14
+- New **MiniDisc** player skin: a black MD deck with a loaded cartridge (your mix cover on the label), a disc that spins while it plays, a dot-matrix display showing the mix name, the current track (long titles scroll), a track-number grid and the elapsed time, plus a stereo level meter. The buttons work: Play, Pause, Stop, back and forward 30 s, the dial skips tracks (left half = previous or restart, right half = next) and a push on its centre plays or pauses; the small arrows above skip mixes. Keyboard works too (Tab, Enter or Space). It is an original design, not a copy of any maker's panel.
+- Gramophone redrawn from a real square-cabinet machine: honey-wood body with carved side panels, ebony corner posts and plinth, a big scalloped brass horn, and a nickel tone arm that tracks across the record as the mix plays. The crank is gone, as on the real one.
+- Database: `supabase/004_skin_minidisc.sql` lets plays on the MiniDisc be counted under "minidisc". Run it once in the Supabase SQL editor. Until you do, the skin still works and the play is still recorded, only without a skin name. `001` is updated for fresh installs and the test suite has a new check (84 pass).
+
 ## 1.14.1 — 2026-11-08
 - Listener login switched OFF for now (config only; the code stays for the roll-out): no Sign in or Account button, no sign-in or passkey or phone options. Everyone can listen without an account. The welcome card still shows social and share links; set `showWelcome: false` in `config.js` to hide it too. Also fixed: the Sign in button could show (and do nothing) when accounts were off.
 
