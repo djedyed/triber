@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.17.0 — 2026-11-21
+- Plays now record an approximate **city** (rounded to about 10 km) so the back office can show where listeners are. The visitor's IP is looked up once per tab by the free geojs.io service and is never stored. It is skipped when the browser sends Do Not Track or Global Privacy Control, and you can switch it off with `geo: false` in `config.js`. It needs `supabase/005_geo_insights.sql` (run once); without it everything still plays and nothing breaks.
+
 ## 1.16.1 — 2026-11-21
 - Digital skin now fills the full width of the page, edge to edge, with more bars on wider screens, and the outer bars are no longer cut off at the sides.
 
