@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.16.1 — 2026-11-21
+- Digital skin now fills the full width of the page, edge to edge, with more bars on wider screens, and the outer bars are no longer cut off at the sides.
+
 ## 1.16.0 — 2026-11-21
 - **Digital** player skin redone to match the rainbow-equalizer look: a mirrored bar spectrum (green through blue and magenta to orange) with a soft glow, plus three flowing sine lines that swell with the music. It follows the real sound (the same analyser the equaliser uses); if the host blocks that, it falls back to a gentle simulated motion. Reduced-motion keeps the lines still. No database change.
 
