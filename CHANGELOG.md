@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.16.0 — 2026-11-21
+- **Digital** player skin redone to match the rainbow-equalizer look: a mirrored bar spectrum (green through blue and magenta to orange) with a soft glow, plus three flowing sine lines that swell with the music. It follows the real sound (the same analyser the equaliser uses); if the host blocks that, it falls back to a gentle simulated motion. Reduced-motion keeps the lines still. No database change.
+
 ## 1.15.0 — 2026-11-14
 - New **MiniDisc** player skin: a black MD deck with a loaded cartridge (your mix cover on the label), a disc that spins while it plays, a dot-matrix display showing the mix name, the current track (long titles scroll), a track-number grid and the elapsed time, plus a stereo level meter. The buttons work: Play, Pause, Stop, back and forward 30 s, the dial skips tracks (left half = previous or restart, right half = next) and a push on its centre plays or pauses; the small arrows above skip mixes. Keyboard works too (Tab, Enter or Space). It is an original design, not a copy of any maker's panel.
 - Gramophone redrawn from a real square-cabinet machine: honey-wood body with carved side panels, ebony corner posts and plinth, a big scalloped brass horn, and a nickel tone arm that tracks across the record as the mix plays. The crank is gone, as on the real one.
