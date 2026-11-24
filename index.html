@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.17.1">
+<meta name="app-version" content="1.17.2">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -1176,7 +1176,9 @@ function renderGenres() {
 /* ---------------- behaviour ---------------- */
 function downloadUrl(m) {
   const u = m.audio_url || '';
-  return u.includes('/storage/v1/object/public/') ? `${u}${u.includes('?') ? '&' : '?'}download=${encodeURIComponent(m.title)}` : u;
+  if (u.includes('/storage/v1/object/public/')) return `${u}${u.includes('?') ? '&' : '?'}download=${encodeURIComponent(m.title)}`;
+  if (u.includes('/api/audio/f/')) return `${u}${u.includes('?') ? '&' : '?'}dl=${encodeURIComponent(m.title)}`;   // Cloudflare R2 via the back office (saves as a file)
+  return u;
 }
 async function selectMix(id, play) {
   const m = S.mixes.find(x => x.id === id); if (!m) return;
