@@ -1,6 +1,9 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.17.2 — 2026-11-23
+- Download button works for mixes stored on Cloudflare R2 (back office 1.17.0 moves mix audio there to avoid Supabase egress limits): the file saves under the mix title instead of opening in a tab. Nothing else changes; streaming, seeking and the EQ work the same.
+
 ## 1.17.1 — 2026-11-21
 - Fix: on phones the Digital skin could stretch the whole page several screens wide and lag. The canvas's own pixel width fed back into the layout. Canvases no longer size the layout, the grid column can shrink, and horizontal overflow is clipped as a safety net.
 - Faster: the Digital skin skips the glow effect and uses coarser lines on small screens.
