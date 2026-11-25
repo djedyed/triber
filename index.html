@@ -34,7 +34,7 @@
 })();
 </script>
 
-<meta name="app-version" content="1.17.1">
+<meta name="app-version" content="1.19.0">
 <meta property="og:title" content="TRIBER — DJ mixes">
 <meta property="og:description" content="True Rhythm Ignites Bodies, Energy Rising.">
 <meta property="og:image" content="assets/social-512.png">
@@ -118,7 +118,7 @@ h1{font:italic 800 clamp(28px,4.4vw,46px)/1.08 var(--serif);margin:8px 0 4px;let
 .ib small{position:absolute;font-size:8px;font-weight:800;top:50%;left:50%;transform:translate(-50%,-44%);pointer-events:none}
 .pp{width:58px;height:58px;border-radius:50%;border:0;background:var(--text);color:var(--bg);display:grid;place-items:center;margin:0 8px}
 .pp:hover{transform:scale(1.04)}
-.actions{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
+.actions{display:flex;flex-wrap:wrap;gap:6px 18px;margin-left:auto;flex:none;align-self:center;justify-content:flex-end}.ttl{flex-wrap:wrap;row-gap:10px}.ttl>div:first-of-type{flex:1 1 220px}
 .act{background:none;border:0;display:inline-flex;align-items:center;gap:7px;padding:6px 0;color:var(--text);font-size:14px;text-decoration:none}
 .act:hover{color:var(--accent-text)}
 .act[aria-pressed=true]{color:var(--pink)}
@@ -293,6 +293,7 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
 .eqp .seg button[aria-checked=true]{background:var(--accent);color:var(--onaccent,var(--onamber))}
 .eqp select{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:4px 6px;font-size:12px}
 .mst{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.mst h3{margin:0;font-size:13px}.mst .gr{font:11px ui-monospace,Menlo,monospace;color:var(--muted);min-width:70px}
+.eq-name{display:flex;gap:6px;align-items:center;flex-basis:100%;justify-content:flex-end}.eq-name input{background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:12px;min-width:0;flex:1 1 140px;max-width:240px}.eq-name[hidden],#eqDelBtn[hidden]{display:none}
 .eqp .pw{border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer}
 .eqp .pw[aria-pressed=true]{color:var(--onamber);background:var(--teal);border-color:var(--teal)}
 .eqp canvas{display:block;width:100%;height:84px;background:var(--cv);border-radius:8px;border:1px solid var(--line)}
@@ -424,7 +425,13 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
     <div>
       <div class="eyebrow"><span class="dot"></span><span id="state">Paused</span></div>
       <div class="ttl"><img id="mCover" class="mcov" alt="" hidden><div><h1 id="mTitle">Loading mixes…</h1>
-      <p class="byline" id="mBy"></p></div></div>
+      <p class="byline" id="mBy"></p></div>
+      <div class="actions">
+        <button class="act" id="bLike" aria-pressed="false"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg><span id="likeTxt">Like</span></button>
+        <a class="act" id="bDl" href="#" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg><span id="dlTxt">Download</span></a>
+        <button class="act eqbtn" id="bEq" aria-pressed="false" aria-expanded="false" aria-controls="eq"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V9M12 20V4M19 20v-7M3 13h4M10 8h4M17 16h4"/></svg>EQ</button>
+        <button class="act" id="bShare"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
+      </div></div>
 
       <div class="now" id="now">
         <div class="txt"><small id="nowLabel">Now playing</small><div id="nowTxt">—</div></div>
@@ -444,17 +451,14 @@ html[data-warm]::after{content:"";position:fixed;inset:0;pointer-events:none;z-i
         <button class="ib" id="bNext" aria-label="Next mix"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7L4 19z"/></svg></button>
       </div>
 
-      <div class="actions">
-        <button class="act" id="bLike" aria-pressed="false"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg><span id="likeTxt">Like</span></button>
-        <a class="act" id="bDl" href="#" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg><span id="dlTxt">Download</span></a>
-        <button class="act eqbtn" id="bEq" aria-pressed="false" aria-expanded="false" aria-controls="eq"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V9M12 20V4M19 20v-7M3 13h4M10 8h4M17 16h4"/></svg>EQ</button>
-        <button class="act" id="bShare"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>Share</button>
-      </div>
       <div class="eqp" id="eq" hidden>
         <div class="eq-top">
           <h3>Your sound</h3>
           <div class="seg" role="radiogroup" aria-label="Equaliser bands"><button role="radio" data-mode="3">3-band</button><button role="radio" data-mode="7">7-band</button><button role="radio" data-mode="12">12-band</button></div>
           <select id="eqPreset" aria-label="Preset"></select>
+          <button class="pw" id="eqSaveBtn" type="button" title="Save the current sliders as your own preset">Save as…</button>
+          <button class="pw" id="eqDelBtn" type="button" hidden title="Delete this saved preset">Delete</button>
+          <form class="eq-name" id="eqNameForm" hidden><input id="eqName" maxlength="24" placeholder="Name your preset" aria-label="Preset name" autocomplete="off"><button class="pw" type="submit">Save</button><button class="pw" type="button" id="eqNameCancel">Cancel</button></form>
           <button class="pw" id="eqPow" aria-pressed="false">OFF</button>
         </div>
         <canvas id="eqCv" width="560" height="168" aria-label="Equaliser response and live spectrum"></canvas>
@@ -1226,6 +1230,18 @@ EQS.led = EQS.led !== false;
 if (!(EQS.master in { off: 1, ...MASTER })) EQS.master = 'off';
 window.__eq = { EQ, get S() { return EQS; } };
 function eqSave() { store.set('triber_eq', JSON.stringify(EQS)); }
+/* user presets: saved on this device only (localStorage). Each keeps the exact sliders of all three band layouts. */
+let EQU = {};
+try { const raw = store.get('triber_eq_user'); if (raw) { const o = JSON.parse(raw); if (o && typeof o === 'object') Object.keys(o).slice(0, 20).forEach(k => { const v = o[k]; if (v && v[3]?.length === 3 && v[7]?.length === 7 && v[12]?.length === 12 && !(k in EQ_PRESETS) && k !== 'Custom') EQU[k] = { 3: v[3].map(Number), 7: v[7].map(Number), 12: v[12].map(Number) }; }); } } catch {}
+function equSave() { store.set('triber_eq_user', JSON.stringify(EQU)); }
+function eqFillPresets() {
+  const esc2 = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const mine = Object.keys(EQU);
+  $('#eqPreset').innerHTML = Object.keys(EQ_PRESETS).map(n => `<option>${esc2(n)}</option>`).join('') + (mine.length ? `<optgroup label="My presets">${mine.map(n => `<option>${esc2(n)}</option>`).join('')}</optgroup>` : '') + '<option>Custom</option>';
+  $('#eqPreset').value = (EQS.preset in EQ_PRESETS || EQS.preset in EQU) ? EQS.preset : 'Custom';
+  $('#eqDelBtn').hidden = !(EQS.preset in EQU && $('#eqPreset').value === EQS.preset);
+}
+
 function eqCtx() {
   if (EQ.ctx) return EQ.ctx;
   const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
@@ -1296,7 +1312,7 @@ function eqRenderFaders() {
 }
 function eqSetGain(i, v, silent) {
   v = Math.max(-12, Math.min(12, Math.round(v * 2) / 2));
-  eqGains()[i] = v; EQS.preset = 'Custom'; $('#eqPreset').value = 'Custom';
+  eqGains()[i] = v; EQS.preset = 'Custom'; $('#eqPreset').value = 'Custom'; $('#eqDelBtn').hidden = true;
   const slot = document.querySelector(`#eq .slot[data-i="${i}"]`);
   if (slot) { slot.querySelector('.cap').style.top = (1 - (v + 12) / 24) * 100 + '%'; slot.querySelector('.fill').style.cssText = fillCss(v); slot.setAttribute('aria-valuenow', v); slot.setAttribute('aria-valuetext', fmtDb(v) + ' dB'); document.querySelector(`#eq .db[data-db="${i}"]`).textContent = fmtDb(v); }
   eqApply(); eqDraw(); if (!silent) eqSave();
@@ -1404,15 +1420,40 @@ function ledInit() {
   vizKick();
 }
 function eqInit() {
-  $('#eqPreset').innerHTML = Object.keys(EQ_PRESETS).concat('Custom').map(n => `<option>${n}</option>`).join('');
-  $('#eqPreset').value = EQS.preset in EQ_PRESETS ? EQS.preset : 'Custom';
+  eqFillPresets();
   eqRenderFaders(); ledInit();
   $('#bEq').addEventListener('click', () => {
     const h = $('#eq').hidden; $('#eq').hidden = !h; $('#bEq').setAttribute('aria-expanded', String(h));
     if (h) { eqCtx(); eqRenderFaders(); eqLoop(); }
   });
   $('#eq .seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; EQS.mode = +b.dataset.mode; eqApply(); eqSave(); eqRenderFaders(); });
-  $('#eqPreset').addEventListener('change', e => { const pr = EQ_PRESETS[e.target.value]; if (!pr) return; EQS.preset = e.target.value; EQS.g[3] = pr[0].slice(); EQS.g[7] = pr[1].slice(); EQS.g[12] = g12From7(pr[1]); eqApply(); eqSave(); eqRenderFaders(); });
+  $('#eqPreset').addEventListener('change', e => {
+    const name = e.target.value, u = EQU[name];
+    if (u) { EQS.preset = name; EQS.g[3] = u[3].slice(); EQS.g[7] = u[7].slice(); EQS.g[12] = u[12].slice(); }
+    else { const pr = EQ_PRESETS[name]; if (!pr) return; EQS.preset = name; EQS.g[3] = pr[0].slice(); EQS.g[7] = pr[1].slice(); EQS.g[12] = g12From7(pr[1]); }
+    $('#eqDelBtn').hidden = !u; eqApply(); eqSave(); eqRenderFaders();
+  });
+  const nameForm = $('#eqNameForm'), nameIn = $('#eqName');
+  $('#eqSaveBtn').addEventListener('click', () => { nameForm.hidden = false; nameIn.value = EQS.preset in EQU ? EQS.preset : ''; nameIn.focus(); nameIn.select(); });
+  $('#eqNameCancel').addEventListener('click', () => { nameForm.hidden = true; });
+  nameIn.addEventListener('keydown', e => { if (e.key === 'Escape') nameForm.hidden = true; });
+  nameForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = nameIn.value.replace(/\s+/g, ' ').trim().slice(0, 24);
+    if (!name) { toast('Give the preset a name first.'); return; }
+    if (name in EQ_PRESETS || name.toLowerCase() === 'custom') { toast('That name is built in. Pick another.'); return; }
+    if (!(name in EQU) && Object.keys(EQU).length >= 20) { toast('You can keep 20 presets. Delete one first.'); return; }
+    const over = name in EQU;
+    EQU[name] = { 3: EQS.g[3].slice(), 7: EQS.g[7].slice(), 12: EQS.g[12].slice() };
+    EQS.preset = name; equSave(); eqSave(); eqFillPresets(); nameForm.hidden = true;
+    toast(over ? `Updated "${name}"` : `Saved "${name}" on this device`);
+  });
+  let delArm = 0;
+  $('#eqDelBtn').addEventListener('click', () => {
+    const name = EQS.preset; if (!(name in EQU)) return;
+    if (!delArm) { delArm = 1; $('#eqDelBtn').textContent = 'Sure?'; setTimeout(() => { delArm = 0; $('#eqDelBtn').textContent = 'Delete'; }, 3000); return; }
+    delArm = 0; $('#eqDelBtn').textContent = 'Delete'; delete EQU[name]; EQS.preset = 'Custom'; equSave(); eqSave(); eqFillPresets(); toast(`Deleted "${name}"`);
+  });
   $('#eqPow').addEventListener('click', async () => {
     EQS.on = !EQS.on; eqSave(); eqCtx(); eqRenderFaders();
     if (EQS.on) { const ok = await eqEnable(); if (!ok) { EQS.on = false; eqSave(); } }

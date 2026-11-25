@@ -1,6 +1,12 @@
 # Changelog (triber, public site)
 Version lives in `<meta name="app-version">` in index.html and shows in the footer. Bump it with every release and add a line here.
 
+## 1.19.0 — 2026-11-24
+- **EQ: save your own presets.** Set the sliders, press **Save as…**, name it, and it joins the Preset list under **My presets** (up to 20, kept on this device, each remembers the 3-, 7- and 12-band settings). Saving under an existing name updates it; **Delete** (press twice to confirm) removes it. Built-in names are protected.
+
+## 1.18.0 — 2026-11-24
+- Like, EQ and Share (and Download when a mix has one) now sit to the right of the mix name, level with the title, so they are visible without scrolling past the controls. On narrow screens they wrap under the name.
+
 ## 1.17.1 — 2026-11-21
 - Fix: on phones the Digital skin could stretch the whole page several screens wide and lag. The canvas's own pixel width fed back into the layout. Canvases no longer size the layout, the grid column can shrink, and horizontal overflow is clipped as a safety net.
 - Faster: the Digital skin skips the glow effect and uses coarser lines on small screens.
